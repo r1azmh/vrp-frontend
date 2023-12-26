@@ -1,6 +1,7 @@
 import {Modal} from "flowbite-react";
 
 export default function DeleteModal({handleDelete,id, openModal, setOpenModal}) {
+
     return (
         <Modal show={openModal} onClose={() => setOpenModal(false)}>
             {/*<Modal.Body>*/}

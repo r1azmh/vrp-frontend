@@ -1,5 +1,4 @@
 import axios from "axios";
-import {apiRoutes} from "../components/constants";
 
 export async function apiPost(url, data) {
     try {
@@ -13,9 +12,18 @@ export async function apiPost(url, data) {
 }
 
 
-export async function apiGet(url, params) {
+export async function apiGet(url) {
     try {
         return await axios.get(url)
+    } catch (e) {
+
+    }
+}
+
+
+export async function apiDelete(url) {
+    try {
+        return await axios.delete(url)
     } catch (e) {
 
     }

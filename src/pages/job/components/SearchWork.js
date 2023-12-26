@@ -20,7 +20,7 @@ export default () => {
     return (
         <Controller
             control={hookControl}
-            name="work_id"
+            name="work"
             render={({field}) => (
                 <AsyncSelect
                     styles={{

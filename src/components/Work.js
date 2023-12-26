@@ -1,13 +1,15 @@
 import {Button, Label, Modal, Pagination, Table, TextInput} from 'flowbite-react';
 import {IoIosAddCircleOutline} from "react-icons/io";
 import {RiRefreshLine} from "react-icons/ri";
-import {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import DeleteModal from "./DeleteModal";
 import {MdDelete, MdEditNote, MdWorkOutline} from "react-icons/md";
 import {FaCaravan} from "react-icons/fa";
+import {createWork, deleteWork, getWorks} from "../managers/workManager";
 
 export default function Work() {
+    const [works, setWorks] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [modalData, setModalData] = useState();
@@ -24,23 +26,36 @@ export default function Work() {
     }
     const handleAddVehicle = (id) => () => {
     }
-    const handleDelete = (id, name) => () => {
+    const handleDelete = (id, name) => async () => {
         setSelectedData({id, name})
         setOpenDeleteModal(true)
+        //
     }
-    const handleDeleteWork = () => (setOpenDeleteModal) => () => {
+    const handleDeleteWork = () => (setOpenDeleteModal) => async () => {
         setOpenDeleteModal(false)
+        await deleteWork(selectedData?.id)
+        setSelectedData(undefined)
     }
+
+
+    useEffect(() => {
+        async function fetchMyAPI() {
+            let response = await getWorks()
+            setWorks(response)
+        }
+
+        fetchMyAPI()
+    }, [selectedData, openModal])
     return (
         <div className="overflow-x-auto min-h-screen flex flex-col justify-between">
             <div>
 
-                <div className="p-2 w-full flex justify-between items-center bg-white border-b">
-                    <Button size="xs" className='bg-white shadow text-black hover:text-white '>
-                        <RiRefreshLine className="mr-2 h-5 w-5"/> Refresh</Button>
-                    <Button onClick={handleOpenModal} size="xs" color="success"
-                            className=" flex shadow gap-x-2 items-center">
-                        <IoIosAddCircleOutline className="mr-2 h-5 w-5"/> Add New</Button>
+                <div  className="p-2 w-full flex justify-between items-center">
+                    <Button onClick={()=>setSelectedData(Math.random())} size="xs" className='bg-white  text-black hover:text-white flex gap-x-2 items-center'>
+                        <RiRefreshLine/> <span className="">Refresh</span></Button>
+                    <Button onClick={handleOpenModal} size="xs" color="success" className=" flex gap-x-2 items-center">
+                        <IoIosAddCircleOutline/> <span
+                        className="">Add New</span></Button>
                 </div>
 
                 <Table striped>
@@ -53,16 +68,19 @@ export default function Work() {
                         </Table.HeadCell>
                     </Table.Head>
                     <Table.Body className="divide-y">
-                        <MakeTableRow
-                            tJob={12}
-                            tVehicle={13}
-                            name={'apple'}
-                            id={1}
-                            handleAddVehicle={handleAddVehicle}
-                            handleDelete={handleDelete}
-                            handleEdit={handleEdit}
-                            handleAddJob={handleAddJob}
-                        />
+                        {
+                            works?.map((work) => <MakeTableRow
+                                key={work?.id}
+                                tJob={12}
+                                tVehicle={13}
+                                name={work?.name}
+                                id={work?.id}
+                                handleAddVehicle={handleAddVehicle}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                                handleAddJob={handleAddJob}
+                            />)
+                        }
                     </Table.Body>
                 </Table>
 
@@ -72,12 +90,14 @@ export default function Work() {
                     layout="pagination"
                     currentPage={12}
                     totalPages={1000}
-                    onPageChange={()=>{}}
+                    onPageChange={() => {
+                    }}
                     previousLabel="Go back"
                     nextLabel="Go forward"
                     showIcons
                 />
-            </div><ModalComponent openModal={openModal} setOpenModal={setOpenModal} modalData={modalData}/>
+            </div>
+            <ModalComponent openModal={openModal} setOpenModal={setOpenModal} modalData={modalData}/>
             <DeleteModal openModal={openDeleteModal} id={selectedData?.id} handleDelete={handleDeleteWork}
                          setOpenModal={setOpenDeleteModal}/>
 
@@ -98,7 +118,8 @@ function MakeTableRow({name, tJob, tVehicle, id, handleEdit, handleAddJob, handl
                     <Button onClick={handleEdit(id, name)} size='xs' className="flex justify-center items-center">
                         <span><MdEditNote className="mr-2 h-5 w-5"/> </span> <span className='pl-2'>Edit</span></Button>
                     <Button onClick={handleAddJob(id)} size='xs' color="blue"
-                            className="flex justify-center items-center"> <MdWorkOutline className="mr-2 h-5 w-5"/> <span className='pl-2'>Add Job</span></Button>
+                            className="flex justify-center items-center"> <MdWorkOutline className="mr-2 h-5 w-5"/>
+                        <span className='pl-2'>Add Job</span></Button>
                     <Button onClick={handleAddVehicle(id)} size='xs' color="blue"
                             className="flex justify-center items-center"> <FaCaravan className="mr-2 h-5 w-5"/> <span
                         className='pl-2'>Add Vehicle</span></Button>
@@ -118,8 +139,9 @@ function ModalComponent({openModal, setOpenModal, modalData}) {
         handleSubmit,
         formState: {errors},
     } = useForm()
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         console.log(data)
+        await createWork(data)
         setOpenModal(false)
     }
     return (

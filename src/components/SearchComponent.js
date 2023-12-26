@@ -54,7 +54,7 @@ const SearchComponent = ({setValue}) => {
 
     return (
         <MapContainer
-            center={[50.5, 30.5]}
+            center={[63.10502, 21.59338]}
             zoom={12}
             style={{height: '300px', width: '100%'}}
         >

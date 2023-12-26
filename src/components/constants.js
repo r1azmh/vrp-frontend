@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:5700/"
+const baseUrl = "http://localhost:5700"
 
 export const JOBS = {
     Dashboard: 1,
@@ -9,5 +9,9 @@ export const JOBS = {
 
 export const apiRoutes = {
     postJob: `${baseUrl}/job-create/`,
-    getWork:(name='')=> `${baseUrl}/works/?name=${name}`
+    postMultiJob: `${baseUrl}/multijob-create/`,
+    getWork:(name='')=> `${baseUrl}/works/?name=${name}`,
+    createWork: `${baseUrl}/work-create/`,
+    deleteWork:(id)=> `${baseUrl}/work_delete/${id}/`,
+    getJobs:(name='')=> `${baseUrl}/jobs/?name=${name}`
 }

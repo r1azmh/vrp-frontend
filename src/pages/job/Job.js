@@ -1,6 +1,6 @@
 import {FormProvider, useForm} from "react-hook-form";
 import {Button, Card, Label, Modal, Select, Table, TextInput} from "flowbite-react";
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {IoIosAddCircleOutline} from "react-icons/io";
 import {CiCircleMinus} from "react-icons/ci";
 import {RiRefreshLine} from "react-icons/ri";
@@ -8,7 +8,7 @@ import DeleteModal from "../../components/DeleteModal";
 import "leaflet/dist/leaflet.css";
 import SearchComponent from "../../components/SearchComponent";
 import {BiTargetLock} from "react-icons/bi";
-import {createJob} from "../../managers/jobManage";
+import {createJob, createMultiJob, getJob} from "../../managers/jobManage";
 import SearchWork from "./components/SearchWork";
 
 const customTheme = {
@@ -18,6 +18,7 @@ const customTheme = {
 
 
 export default function Job() {
+    const [jobs, setJobs] = useState([])
     const [openModal, setOpenModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [modalData, setModalData] = useState();
@@ -41,6 +42,14 @@ export default function Job() {
     const handleDeleteWork = () => (setOpenDeleteModal) => () => {
         setOpenDeleteModal(false)
     }
+
+    useEffect(()=>{
+        async function fetchMyAPI() {
+            let response = await getJob()
+            setJobs(response)
+        }
+        fetchMyAPI()
+    }, [])
     return (
         <div className="overflow-x-auto min-h-screen">
             <div className="p-2 w-full flex justify-between items-center">
@@ -60,16 +69,19 @@ export default function Job() {
                     </Table.HeadCell>
                 </Table.Head>
                 <Table.Body className="divide-y">
-                    <MakeTableRow
-                        tJob={12}
-                        tVehicle={13}
-                        name={'apple'}
-                        id={1}
-                        handleAddVehicle={handleAddVehicle}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        handleAddJob={handleAddJob}
-                    />
+                    {
+                        jobs?.map((job)=><MakeTableRow
+                            key={job?.id}
+                            lattitude={job?.lat}
+                            longitude={job?.lng}
+                            name={job?.name}
+                            id={job?.id}
+                            handleAddVehicle={handleAddVehicle}
+                            handleDelete={handleDelete}
+                            handleEdit={handleEdit}
+                            handleAddJob={handleAddJob}
+                        />)
+                    }
                 </Table.Body>
             </Table>
 
@@ -80,19 +92,17 @@ export default function Job() {
     );
 }
 
-function MakeTableRow({name, tJob, tVehicle, id, handleEdit, handleAddJob, handleAddVehicle, handleDelete}) {
+function MakeTableRow({name, lattitude, longitude, id, handleEdit, handleAddJob, handleAddVehicle, handleDelete}) {
     return (
         <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
             <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                 {name}
             </Table.Cell>
-            <Table.Cell>{tJob}</Table.Cell>
-            <Table.Cell>{tVehicle}</Table.Cell>
+            <Table.Cell>{lattitude}</Table.Cell>
+            <Table.Cell>{longitude}</Table.Cell>
             <Table.Cell>
                 <div className="flex flex-wrap gap-2">
                     <Button onClick={handleEdit(id, name)} size='xs'>Edit</Button>
-                    <Button onClick={handleAddJob(id)} size='xs' color="blue">Add Job</Button>
-                    <Button onClick={handleAddVehicle(id)} size='xs' color="blue">Add Vehicle</Button>
                     <Button onClick={handleDelete(id, name)} size='xs' color="failure">Delete</Button>
                 </div>
             </Table.Cell>
@@ -136,13 +146,27 @@ function JobForm() {
 
         console.log('data', data)
         if (data?.job_type !== 'mm') {
+            const work = data?.work
             const job = data?.jobs?.[0]
             job.name = data?.name;
+            job.work_id = work?.value;
             job.job_type = data?.job_type;
             job.start_at = new Date(job.start_at).toISOString()
             job.end_at = new Date(job.end_at).toISOString()
             await createJob(job)
             console.log('job', job)
+        }
+        if (data?.job_type === 'mm'){
+            console.log('data multi', data)
+            const jobs = []
+            for (let job of data?.jobs){
+                job.work_id = data?.work?.value
+                jobs.push(job)
+            }
+            data.work_id = data?.work?.value
+            data.jobs = jobs
+            console.log('after', data)
+            await createMultiJob(data)
         }
 
     }
@@ -181,7 +205,7 @@ function JobDefinition({register,  watch, getValues, setValue}) {
                         <Select {...register("job_type", {required: true})} id="type" required>
                             <option value='pp'>Pick-up</option>
                             <option value='dd'>Delivery</option>
-                            <option value='mm'>Multi</option>
+                            <option value='mm'>MultiJob</option>
                         </Select>
                     </div>
                     <div>
@@ -242,6 +266,10 @@ function Jobs({register, watch, getValues, setValue, errors}) {
 
 
 function JobCard({register, getValues, setValue, isMulti, handleRemove, index}) {
+    function checkNAN(value){
+        if (isNaN(value)) {return ''}
+        return value
+    }
     const setLatLang = (value) => {
         // console.log(value)
         setValue(`jobs.${index}.lat`, value?.Latitude)
@@ -272,7 +300,7 @@ function JobCard({register, getValues, setValue, isMulti, handleRemove, index}) 
                             <div className="mb-2 block">
                                 <Label htmlFor="type" value="Job Type"/>
                             </div>
-                            <Select {...register(`jobs.${index}.select_job`)} id="type" required>
+                            <Select {...register(`jobs.${index}.job_type`)} id="type" required>
                                 <option value='pp'>Pick-up</option>
                                 <option value='dd'>Delivery</option>
                             </Select>
@@ -326,9 +354,9 @@ function JobCard({register, getValues, setValue, isMulti, handleRemove, index}) 
                     <div>
                         <div className="flex justify-between">
                             <span className="inline-flex  justify-center items-center "><BiTargetLock
-                                className="text-rose-600"/>Longitude:{lng}</span>
+                                className="text-rose-600"/>Longitude:{checkNAN(lng)}</span>
                             <span className="inline-flex justify-center items-center"><BiTargetLock
-                                className="text-green-400"/>Longitude:{lat}</span>
+                                className="text-green-400"/>Longitude:{checkNAN(lat)}</span>
                         </div>
                         <div>
                             <SearchComponent setValue={setLatLang}/>
