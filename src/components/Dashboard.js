@@ -3,8 +3,9 @@ import SidebarComponent from "./SidebarComponent";
 import {JOBS} from "./constants";
 import Work from "./Work";
 import Job from "../pages/job/Job";
-import Fleet from "./Fleet";
 import Stat from "./Stat";
+import Fleet from "../pages/fleet/Fleet";
+import VehicleProfile from "../pages/vehicleProfile/VehicleProfile";
 
 
 const Dashboard = () => {
@@ -19,6 +20,8 @@ const Dashboard = () => {
                 return <Job/>
             case JOBS.Fleet:
                 return <Fleet/>
+            case JOBS.VehicleProfile:
+                return <VehicleProfile />
             default:
                 return <Stat/>
         }

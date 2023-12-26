@@ -8,7 +8,7 @@ import DeleteModal from "../../components/DeleteModal";
 import "leaflet/dist/leaflet.css";
 import SearchComponent from "../../components/SearchComponent";
 import {BiTargetLock} from "react-icons/bi";
-import {createJob, createMultiJob, getJob} from "../../managers/jobManage";
+import {createJob, createMultiJob, deleteJob, getJob} from "../../managers/jobManage";
 import SearchWork from "./components/SearchWork";
 
 const customTheme = {
@@ -31,29 +31,34 @@ export default function Job() {
         setModalData({id: id, name: name})
         setOpenModal(true)
     }
-    const handleAddJob = (id) => () => {
+    const handleAddJob = (id, name) => () => {
     }
     const handleAddVehicle = (id) => () => {
     }
-    const handleDelete = (id, name) => () => {
+    const handleDelete = (id, name)=>()=> {
         setSelectedData({id, name})
-        setOpenDeleteModal(true)
+       setOpenDeleteModal(true)
+
     }
-    const handleDeleteWork = () => (setOpenDeleteModal) => () => {
-        setOpenDeleteModal(false)
+    const handleDeleteJob= (id) => (setOpenDeleteModal) =>async () => {
+        await deleteJob(id).then(() => {
+            setOpenDeleteModal(false)
+        })
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         async function fetchMyAPI() {
             let response = await getJob()
             setJobs(response)
         }
-        fetchMyAPI()
-    }, [])
+
+        fetchMyAPI().then()
+    }, [selectedData, openModal, openDeleteModal])
     return (
         <div className="overflow-x-auto min-h-screen">
             <div className="p-2 w-full flex justify-between items-center">
-                <Button size="xs" className='bg-white  text-black hover:text-white flex gap-x-2 items-center'>
+                <Button onClick={() => setSelectedData({})} size="xs"
+                        className='bg-white  text-black hover:text-white flex gap-x-2 items-center'>
                     <RiRefreshLine/> <span className="">Refresh</span></Button>
                 <Button onClick={handleOpenModal} size="xs" color="success" className=" flex gap-x-2 items-center">
                     <IoIosAddCircleOutline/> <span
@@ -70,11 +75,11 @@ export default function Job() {
                 </Table.Head>
                 <Table.Body className="divide-y">
                     {
-                        jobs?.map((job)=><MakeTableRow
+                        jobs?.map((job) => <MakeTableRow
                             key={job?.id}
                             lattitude={job?.lat}
                             longitude={job?.lng}
-                            name={job?.name}
+                            name={job?.name ?? job?.multi?.name + "(multi-job)"}
                             id={job?.id}
                             handleAddVehicle={handleAddVehicle}
                             handleDelete={handleDelete}
@@ -86,13 +91,13 @@ export default function Job() {
             </Table>
 
             <ModalComponent openModal={openModal} setOpenModal={setOpenModal} modalData={modalData}/>
-            <DeleteModal openModal={openDeleteModal} id={selectedData?.id} handleDelete={handleDeleteWork}
+            <DeleteModal openModal={openDeleteModal} id={selectedData?.id} handleDelete={handleDeleteJob}
                          setOpenModal={setOpenDeleteModal}/>
         </div>
     );
 }
 
-function MakeTableRow({name, lattitude, longitude, id, handleEdit, handleAddJob, handleAddVehicle, handleDelete}) {
+function MakeTableRow({name, lattitude, longitude, id, handleEdit, handleDelete}) {
     return (
         <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
             <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
@@ -125,14 +130,14 @@ function ModalComponent({openModal, setOpenModal, modalData}) {
         <><Modal size='5xl' show={openModal} onClose={() => setOpenModal(false)}>
             <Modal.Header>Add New Job</Modal.Header>
             <Modal.Body>
-                <JobForm/>
+                <JobForm setOpenModal={setOpenModal}/>
             </Modal.Body>
         </Modal>
         </>
     );
 }
 
-function JobForm() {
+function JobForm({setOpenModal}) {
     const {
         register,
         control,
@@ -153,40 +158,40 @@ function JobForm() {
             job.job_type = data?.job_type;
             job.start_at = new Date(job.start_at).toISOString()
             job.end_at = new Date(job.end_at).toISOString()
-            await createJob(job)
+            await createJob(job).then(setOpenModal(false))
             console.log('job', job)
         }
-        if (data?.job_type === 'mm'){
+        if (data?.job_type === 'mm') {
             console.log('data multi', data)
             const jobs = []
-            for (let job of data?.jobs){
+            for (let job of data?.jobs) {
                 job.work_id = data?.work?.value
                 jobs.push(job)
             }
             data.work_id = data?.work?.value
             data.jobs = jobs
             console.log('after', data)
-            await createMultiJob(data)
+            await createMultiJob(data).then(setOpenModal(false))
         }
 
     }
     return (
         <FormProvider {...{register, control}}>
-        <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-3 gap-x-2">
-            <div className='col-span-1'>
-                <JobDefinition register={register} watch={watch} getValues={getValues} setValue={setValue}/>
-                <Button size="xs" className="mt-4" type="submit">Submit</Button>
-            </div>
-            <div className="col-span-2">
-                <Jobs errors={errors}  register={register} watch={watch} getValues={getValues} setValue={setValue}/>
-            </div>
-        </form>
+            <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-3 gap-x-2">
+                <div className='col-span-1'>
+                    <JobDefinition register={register} watch={watch} getValues={getValues} setValue={setValue}/>
+                    <Button size="xs" className="mt-4" type="submit">Submit</Button>
+                </div>
+                <div className="col-span-2">
+                    <Jobs errors={errors} register={register} watch={watch} getValues={getValues} setValue={setValue}/>
+                </div>
+            </form>
         </FormProvider>
     )
 
 }
 
-function JobDefinition({register,  watch, getValues, setValue}) {
+function JobDefinition({register, watch, getValues, setValue}) {
     return (
         <>
             <Card className="max-w-sm">
@@ -205,14 +210,14 @@ function JobDefinition({register,  watch, getValues, setValue}) {
                         <Select {...register("job_type", {required: true})} id="type" required>
                             <option value='pp'>Pick-up</option>
                             <option value='dd'>Delivery</option>
-                            <option value='mm'>MultiJob</option>
+                            <option value='mm'>Multi</option>
                         </Select>
                     </div>
                     <div>
                         <div className="mb-2 block">
                             <Label htmlFor="type" value="Work"/>
                         </div>
-                       <SearchWork />
+                        <SearchWork/>
                     </div>
                 </div>
             </Card>
@@ -221,7 +226,7 @@ function JobDefinition({register,  watch, getValues, setValue}) {
 }
 
 function Jobs({register, watch, getValues, setValue, errors}) {
-    const newJob = {lng: '', lat: '', start_at: '', duration: 0, demand: 0, end_at: ''}
+    const newJob = {lng: null, lat: null, start_at: null, duration: null, demand: null, end_at: null}
     const isMulti = useMemo(() => {
         return getValues('job_type') === 'mm';
     }, [watch('job_type')])
@@ -266,10 +271,6 @@ function Jobs({register, watch, getValues, setValue, errors}) {
 
 
 function JobCard({register, getValues, setValue, isMulti, handleRemove, index}) {
-    function checkNAN(value){
-        if (isNaN(value)) {return ''}
-        return value
-    }
     const setLatLang = (value) => {
         // console.log(value)
         setValue(`jobs.${index}.lat`, value?.Latitude)
@@ -338,7 +339,7 @@ function JobCard({register, getValues, setValue, isMulti, handleRemove, index}) 
                                    id="number-input" {...register(`jobs.${index}.start_at`)}
                                    aria-describedby="helper-text-explanation"
                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   placeholder="100" required/>
+                                   placeholder="100"/>
                         </div>
                         <div className="">
                             <label htmlFor="number-input"
@@ -348,15 +349,15 @@ function JobCard({register, getValues, setValue, isMulti, handleRemove, index}) 
                                    type="datetime-local" id="number-input" {...register(`jobs.${index}.end_at`)}
                                    aria-describedby="helper-text-explanation"
                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   placeholder="5" required/>
+                                   placeholder="5"/>
                         </div>
                     </div>
                     <div>
                         <div className="flex justify-between">
                             <span className="inline-flex  justify-center items-center "><BiTargetLock
-                                className="text-rose-600"/>Longitude:{checkNAN(lng)}</span>
+                                className="text-rose-600"/>Longitude:{lng}</span>
                             <span className="inline-flex justify-center items-center"><BiTargetLock
-                                className="text-green-400"/>Longitude:{checkNAN(lat)}</span>
+                                className="text-green-400"/>Longitude:{lat}</span>
                         </div>
                         <div>
                             <SearchComponent setValue={setLatLang}/>

@@ -10,7 +10,7 @@ This is the frontend of the [VRP Solutions Project](https://github.com/r1azmh/vr
 npm install -g yarn
 ```
 3. Clone and Run
-* Choose the project directory: Open the Command Prompt and go to the desired location of your computer here you want to download the project.
+* Choose the project directory: Open the Command Prompt and go to the desired location of your computer where you want to download the project.
 ```shell
 cd C:\your-location
 ```

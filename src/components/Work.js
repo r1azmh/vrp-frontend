@@ -50,8 +50,9 @@ export default function Work() {
         <div className="overflow-x-auto min-h-screen flex flex-col justify-between">
             <div>
 
-                <div  className="p-2 w-full flex justify-between items-center">
-                    <Button onClick={()=>setSelectedData(Math.random())} size="xs" className='bg-white  text-black hover:text-white flex gap-x-2 items-center'>
+                <div className="p-2 w-full flex justify-between items-center">
+                    <Button onClick={() => setSelectedData(Math.random())} size="xs"
+                            className='bg-white  text-black hover:text-white flex gap-x-2 items-center'>
                         <RiRefreshLine/> <span className="">Refresh</span></Button>
                     <Button onClick={handleOpenModal} size="xs" color="success" className=" flex gap-x-2 items-center">
                         <IoIosAddCircleOutline/> <span
@@ -71,8 +72,8 @@ export default function Work() {
                         {
                             works?.map((work) => <MakeTableRow
                                 key={work?.id}
-                                tJob={12}
-                                tVehicle={13}
+                                tJob={work?.total_jobs}
+                                tVehicle={work?.total_vehicles}
                                 name={work?.name}
                                 id={work?.id}
                                 handleAddVehicle={handleAddVehicle}

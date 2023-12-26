@@ -1,5 +1,5 @@
 import {apiRoutes} from "../components/constants";
-import {apiGet, apiPost} from "./apiManager";
+import {apiDelete, apiGet, apiPost} from "./apiManager";
 
 export async function createJob(data) {
     await apiPost(apiRoutes.postJob, data)
@@ -26,4 +26,9 @@ export async function getJob(title) {
         return data?.data
     }
     return res
+}
+
+
+export async function deleteJob(id) {
+    await apiDelete(apiRoutes.deleteJob(id))
 }

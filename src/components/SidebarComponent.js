@@ -3,12 +3,14 @@ import {HiUserCircle} from "react-icons/hi2";
 import {JOBS} from "./constants";
 import {MdLeaderboard, MdWork} from "react-icons/md";
 import {FaCaravan, FaNetworkWired} from "react-icons/fa";
+import {GiCarWheel} from "react-icons/gi";
 
 const JOBICON = {
     Dashboard: MdLeaderboard,
     Job: MdWork,
     Work: FaNetworkWired,
-    Fleet: FaCaravan
+    Fleet: FaCaravan,
+    VehicleProfile: GiCarWheel
 }
 
 
