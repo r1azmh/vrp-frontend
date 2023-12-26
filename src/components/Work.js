@@ -86,6 +86,7 @@ export default function Work() {
                 </Table>
 
             </div>
+            {/*
             <div className="flex overflow-x-auto sm:justify-center">
                 <Pagination
                     layout="pagination"
@@ -98,6 +99,7 @@ export default function Work() {
                     showIcons
                 />
             </div>
+            */}
             <ModalComponent openModal={openModal} setOpenModal={setOpenModal} modalData={modalData}/>
             <DeleteModal openModal={openDeleteModal} id={selectedData?.id} handleDelete={handleDeleteWork}
                          setOpenModal={setOpenDeleteModal}/>
