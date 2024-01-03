@@ -357,7 +357,7 @@ function JobCard({register, getValues, setValue, isMulti, handleRemove, index}) 
                             <span className="inline-flex  justify-center items-center "><BiTargetLock
                                 className="text-rose-600"/>Longitude:{lng}</span>
                             <span className="inline-flex justify-center items-center"><BiTargetLock
-                                className="text-green-400"/>Longitude:{lat}</span>
+                                className="text-green-400"/>Latitude:{lat}</span>
                         </div>
                         <div>
                             <SearchComponent setValue={setLatLang}/>
