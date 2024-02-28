@@ -16,6 +16,7 @@ export const apiRoutes = {
     createWork: `${apiBaseUrl}/work-create/`,
     deleteWork:(id)=> `${apiBaseUrl}/work_delete/${id}/`,
     getJobs:(name='')=> `${apiBaseUrl}/jobs/?name=${name}`,
+    getSolution:(id='')=> `${apiBaseUrl}/solve/${id}`,
     getVehicles:(name='')=> `${apiBaseUrl}/vehicles/?name=${name}`,
     getVehicleProfiles:(name='')=> `${apiBaseUrl}/vehicle-profiles/?name=${name}`,
     createVehicleProfile: `${apiBaseUrl}/vehicle-profile-create/`,

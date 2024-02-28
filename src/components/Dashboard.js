@@ -3,7 +3,7 @@ import SidebarComponent from "./SidebarComponent";
 import {JOBS} from "./constants";
 import Work from "./Work";
 import Job from "../pages/job/Job";
-import Stat from "./Stat";
+import Statistics from "./Statistics";
 import Fleet from "../pages/fleet/Fleet";
 import VehicleProfile from "../pages/vehicleProfile/VehicleProfile";
 
@@ -13,7 +13,7 @@ const Dashboard = () => {
     const selectedComponent = useMemo(() => {
         switch (selectedTab) {
             case JOBS.Dashboard:
-                return <Stat/>
+                return <Statistics/>
             case JOBS.Work:
                 return <Work/>
             case JOBS.Job:
@@ -23,7 +23,7 @@ const Dashboard = () => {
             case JOBS.VehicleProfile:
                 return <VehicleProfile />
             default:
-                return <Stat/>
+                return <Statistics/>
         }
     }, [selectedTab])
     return (

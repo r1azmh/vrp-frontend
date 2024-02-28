@@ -3,13 +3,13 @@ import {IoIosAddCircleOutline} from "react-icons/io";
 import {RiRefreshLine} from "react-icons/ri";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
-import DeleteModal from "./DeleteModal";
 import {MdDelete, MdEditNote, MdWorkOutline} from "react-icons/md";
 import {FaCaravan} from "react-icons/fa";
-import {createWork, deleteWork, getWorks} from "../managers/workManager";
+import {createVehicleProfile, deleteVehicleProfile, getVehicleProfile} from "../../managers/profileManage";
+import DeleteModal from "../../components/DeleteModal";
 
-export default function Work() {
-    const [works, setWorks] = useState([]);
+export default function VehicleProfile() {
+    const [profile, setProfile] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [modalData, setModalData] = useState();
@@ -33,15 +33,15 @@ export default function Work() {
     }
     const handleDeleteWork = () => (setOpenDeleteModal) => async () => {
         setOpenDeleteModal(false)
-        await deleteWork(selectedData?.id)
+        await deleteVehicleProfile(selectedData?.id)
         setSelectedData(undefined)
     }
 
 
     useEffect(() => {
         async function fetchMyAPI() {
-            let response = await getWorks()
-            setWorks(response)
+            let response = await getVehicleProfile()
+            setProfile(response)
         }
 
         fetchMyAPI()
@@ -64,17 +64,23 @@ export default function Work() {
                         <Table.HeadCell>Name</Table.HeadCell>
                         <Table.HeadCell>Total Job</Table.HeadCell>
                         <Table.HeadCell>Total Vehicles</Table.HeadCell>
+                        <Table.HeadCell>Cost</Table.HeadCell>
+                        <Table.HeadCell>Distance</Table.HeadCell>
+                        <Table.HeadCell>Time</Table.HeadCell>
                         <Table.HeadCell>
                             <span className="">Actions</span>
                         </Table.HeadCell>
                     </Table.Head>
                     <Table.Body className="divide-y">
                         {
-                            works?.map((work) => <MakeTableRow
+                            profile?.map((work) => <MakeTableRow
                                 key={work?.id}
                                 tJob={work?.total_jobs}
                                 tVehicle={work?.total_vehicles}
                                 name={work?.name}
+                                distance={work?.distance}
+                                cost={work?.fixed_cost}
+                                time={work?.time}
                                 id={work?.id}
                                 handleAddVehicle={handleAddVehicle}
                                 handleDelete={handleDelete}
@@ -106,7 +112,7 @@ export default function Work() {
     );
 }
 
-function MakeTableRow({name, tJob, tVehicle, id, handleEdit, handleAddJob, handleAddVehicle, handleDelete}) {
+function MakeTableRow({name, tJob, tVehicle, id, distance, cost, time, handleEdit, handleAddJob, handleAddVehicle, handleDelete}) {
     return (
         <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
             <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
@@ -114,6 +120,9 @@ function MakeTableRow({name, tJob, tVehicle, id, handleEdit, handleAddJob, handl
             </Table.Cell>
             <Table.Cell>{tJob}</Table.Cell>
             <Table.Cell>{tVehicle}</Table.Cell>
+            <Table.Cell>{cost}</Table.Cell>
+            <Table.Cell>{distance}</Table.Cell>
+            <Table.Cell>{time}</Table.Cell>
             <Table.Cell>
                 <div className="flex flex-wrap gap-2">
                     <Button onClick={handleEdit(id, name)} size='xs' className="flex justify-center items-center">
@@ -142,25 +151,69 @@ function ModalComponent({openModal, setOpenModal, modalData}) {
     } = useForm()
     const onSubmit = async (data) => {
         console.log(data)
-        await createWork(data)
+        await createVehicleProfile(data)
         setOpenModal(false)
     }
     return (
         <><Modal show={openModal} onClose={() => setOpenModal(false)}>
-            <Modal.Header>Add New Work</Modal.Header>
+            <Modal.Header>Add New Profile</Modal.Header>
             <Modal.Body>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="mb-2 block">
-                        <Label htmlFor="name" value="Work Name"/>
-                    </div>
-                    <TextInput defaultValue={modalData && modalData?.name} {...register('name', {
-                        required: true,
-                        maxLength: 20
-                    })} id="name" type="text" placeholder="New Work" required/>
-                    {errors.name?.type === 'maxLength' &&
-                        <span className='text-red-600'>Name cannot exceed 20 characters.</span>}
-                    {errors.name?.type === 'required' && <span className='text-red-600'>This field is required</span>}
+                    <div>
+                        <div className="mb-2 block">
+                            <Label htmlFor="name" value="Profile Name"/>
+                        </div>
+                        <TextInput defaultValue={modalData && modalData?.name} {...register('name', {
+                            required: true,
+                            maxLength: 20
+                        })} id="name" type="text" placeholder="New Vehicle Profile" required/>
+                        {errors.name?.type === 'maxLength' &&
+                            <span className='text-red-600'>Name cannot exceed 20 characters.</span>}
+                        {errors.name?.type === 'required' &&
+                            <span className='text-red-600'>This field is required</span>}
 
+                    </div>
+                    <div className="grid grid-cols-3 gap-4">
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="name" value="Fixed Cost"/>
+                            </div>
+                            <TextInput step="any"  inputmode="decimal"
+                                       pattern="[0-9]*[.,]?[0-9]*"
+                                       defaultValue={modalData && modalData?.name} {...register('fixed_cost', {
+                                required: true
+                            })} id="name" type="number" placeholder="100" required/>
+                            {errors?.fixed_cost &&
+                                <span className='text-red-600'>Fix this field</span>}
+
+                        </div>
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="name" value="Distance"/>
+                            </div>
+                            <TextInput step="any" inputmode="decimal"
+                                       pattern="[0-9]*[.,]?[0-9]*"
+                                       defaultValue={modalData && modalData?.distance} {...register('distance', {
+                                required: true
+                            })} id="name" type="number" placeholder="200.0" required/>
+                            {errors?.distance &&
+                                <span className='text-red-600'>Fix this field</span>}
+
+                        </div>
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="name" value="Time"/>
+                            </div>
+                            <TextInput step="any"  inputmode="decimal"
+                                       pattern="[0-9]*[.,]?[0-9]*"
+                                       defaultValue={modalData && modalData?.time} {...register('time', {
+                                required: true
+                            })} id="time" type="number" placeholder="12.0" required/>
+                            {errors?.time &&
+                                <span className='text-red-600'>Fix this field</span>}
+
+                        </div>
+                    </div>
                     <Button className="mt-4" type="submit">Submit</Button>
                 </form>
             </Modal.Body>
@@ -168,3 +221,4 @@ function ModalComponent({openModal, setOpenModal, modalData}) {
         </>
     );
 }
+

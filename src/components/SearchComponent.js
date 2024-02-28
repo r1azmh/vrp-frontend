@@ -6,33 +6,22 @@ import 'leaflet-geosearch/dist/geosearch.css';
 import {GeoSearchControl, OpenStreetMapProvider} from 'leaflet-geosearch';
 import markerUrl from "./marker.svg"
 
+const iconLocation = new L.Icon({
+    iconUrl: markerUrl,
+    iconRetinaUrl: markerUrl,
+    iconSize: new L.Point(30, 50),
+    className: 'marker'
+});
+
 const CustomMarker = ({setValue}) => {
     const map = useMap();
-    useEffect(() => {
-        const provider = new OpenStreetMapProvider();
-        const searchControl = new GeoSearchControl({
-            style: 'bar',
-            provider: provider,
-            showMarker: false, // Let the custom marker handle it
-        });
-
-        map.addControl(searchControl);
-        return () => map.removeControl(searchControl)
-    }, []);
-
-    const iconLocation = new L.Icon({
-        iconUrl: markerUrl,
-        iconRetinaUrl: markerUrl,
-        iconSize: new L.Point(30, 50),
-        className: 'marker'
-    });
 
 
     const marker = L.marker(map.getCenter(), {
         icon: iconLocation,
-        draggable: true,
-        autoPan: true,
-    }).addTo(map);
+        draggable: false,
+        autoPan: false,
+    });
 
     marker.on('dragend', function (e) {
         updateLatLng(marker.getLatLng().lat, marker.getLatLng().lng);
@@ -41,11 +30,24 @@ const CustomMarker = ({setValue}) => {
     map.on('click', function (e) {
         marker.setLatLng(e.latlng);
         updateLatLng(marker.getLatLng().lat, marker.getLatLng().lng);
+
     });
 
     function updateLatLng(lat, lng) {
         setValue({Latitude: lat, Longitude: lng});
+        marker.addTo(map)
     }
+
+    useEffect(() => {
+        const searchControl = new GeoSearchControl({
+            style: 'bar',
+            provider: new OpenStreetMapProvider(),
+            showMarker: false, // Let the custom marker handle it
+        });
+
+        map.addControl(searchControl);
+        return () => map.removeControl(searchControl)
+    }, []);
 
     return null;
 };
