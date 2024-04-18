@@ -1,5 +1,5 @@
 import {apiRoutes} from "../components/constants";
-import {apiDelete, apiGet, apiPost} from "./apiManager";
+import {apiDelete, apiGet, apiPost, apiPut} from "./apiManager";
 
 export async function createJob(data) {
     await apiPost(apiRoutes.postJob, data)
@@ -7,6 +7,10 @@ export async function createJob(data) {
 
 export async function createMultiVehicle(data) {
     await apiPost(apiRoutes.createVehicle, data)
+}
+
+export async function updateVehicle(id, data) {
+    await apiPut(apiRoutes.updateVehicle(id), data)
 }
 
 export async function deleteVehicle(id) {
@@ -22,7 +26,7 @@ export async function getVehicle(title) {
     return res
 }
 export async function getVehicleProfile(title) {
-    const data = await apiGet(apiRoutes.getVehicleProfiles(title))
+    const data = await apiGet(apiRoutes.searchVehicleProfiles(title))
     const res = []
     if (data?.data){
         for (let profile of data?.data){
@@ -30,4 +34,8 @@ export async function getVehicleProfile(title) {
         }
     }
     return res
+}
+
+export async function createBulkFleet(data){
+    await apiPost(apiRoutes.postBulkFleet, data)
 }

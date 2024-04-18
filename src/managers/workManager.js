@@ -1,4 +1,4 @@
-import {apiDelete, apiGet, apiPost} from "./apiManager";
+import {apiDelete, apiGet, apiPost, apiPut} from "./apiManager";
 import {apiRoutes} from "../components/constants";
 
 export async function getWorks(title) {
@@ -16,3 +16,8 @@ export async function deleteWork(id) {
 export async function createWork(data) {
     await apiPost(apiRoutes.createWork, data)
 }
+
+export async function updateJob(workID, data) {
+    await apiPut(apiRoutes.updateWork(workID), data)
+}
+

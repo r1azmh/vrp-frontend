@@ -1,7 +1,9 @@
 import {Bar, BarChart, CartesianGrid, Legend, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
 import {useMemo} from "react";
+import { colorPalette } from './constants';
 
 const BarChartTruck = ({data}) => {
+    const config = {fontSize:14}
     const graphData = useMemo(()=>{
         let gh = []
         if(data?.tours){
@@ -28,12 +30,12 @@ const BarChartTruck = ({data}) => {
                 }}
             >
                 <CartesianGrid strokeDasharray="3 3"/>
-                <XAxis dataKey="name"/>
-                <YAxis/>
-                <Tooltip/>
-                <Legend/>
-                <Bar dataKey="distance" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue"/>}/>
-                <Bar dataKey="duration" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple"/>}/>
+                <XAxis tick={config} dataKey="name"/>
+                <YAxis tick={config}/>
+                <Tooltip style={config} contentStyle={config}/>
+                <Legend wrapperStyle={config} className='text-sm'/>
+                <Bar dataKey="distance" fill={colorPalette[0]} />
+                <Bar dataKey="duration" fill={colorPalette[2]} />
             </BarChart>
         </ResponsiveContainer>
     );

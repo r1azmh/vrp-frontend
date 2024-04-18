@@ -3,6 +3,7 @@ import tileLayer from './tileLayer';
 import L from "leaflet";
 import React from "react";
 import markerUrl from "./marker.svg"
+import { colorPalette } from './constants';
 
 const iconLocation = new L.Icon({
     iconUrl: markerUrl,
@@ -13,7 +14,7 @@ const iconLocation = new L.Icon({
     className: 'marker'
 });
 
-const COLOR = ["#fb0200", "#ff00df", "#00ff02", "#00d6ff", "#ffafaf"]
+
 
 const ResultMao = ({tours}) => {
     const center = React.useMemo(()=>{
@@ -46,7 +47,7 @@ const ResultMao = ({tours}) => {
             <TileLayer {...tileLayer} />
 
 
-            {tours.map((tour, index) => <ShowPoly points={points(tour)} color={COLOR[index % 5]} details={tour}/>)
+            {tours.map((tour, index) => <ShowPoly points={points(tour)} color={colorPalette[index % 5]} details={tour}/>)
 
             }
         </MapContainer>

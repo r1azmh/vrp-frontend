@@ -1,17 +1,91 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import * as ReactDOM from "react-dom/client";
+import {
+    createBrowserRouter,
+    RouterProvider,
+} from "react-router-dom";
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import Dashboard from './components/Dashboard';
+import NavbarComponent from './components/NavbarComponent';
+import Statistics from './components/Statistics';
+import './index.css';
+import About from './pages/about/About';
+import Category from './pages/category/Category';
+import Contact from './pages/contact/Contact';
+import Fleet from './pages/fleet/Fleet';
+import Job from './pages/job/Job';
+import Error from './pages/not-found/Error';
+import VehicleProfile from './pages/vehicleProfile/VehicleProfile';
+import Work from './pages/work/Work';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <App/>,
+    },
+    {
+        path: "/about",
+        element: <About/>,
+    },
+    {
+        path: "/contact",
+        element: <Contact/>,
+    },
+    {
+        path: "/Dashboard",
+        Component: Dashboard,
+        children: [
+            {
+                path: "",
+                Component: Statistics,
+            },
+            {
+                path: "work",
+                Component: Work,
+            },
+            {
+                path: "job",
+                Component: Job,
+            },
+            {
+                path: "job-category",
+                Component: Category,
+            },
+            {
+                path: "fleet",
+                Component: Fleet,
+            },
+            {
+                path: "vehicle-profile",
+                Component: VehicleProfile,
+            },
+            {
+                path: "about",
+                Component: About,
+            },
+            {
+                path: "contact",
+                Component: Contact,
+            },
+        ],
+    },
+    {
+        path: "*",
+        Component: Error,
+    },
+
+]);
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+    <React.StrictMode>
+        <div className="min-h-screen font-poppins">
+            <NavbarComponent/>
+            {/* <div className=""> */}
+            <div className="bg-white">
+                <RouterProvider router={router}/>
+                {/* </div> */}
+            </div>
+        </div>
+
+    </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

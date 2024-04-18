@@ -2,7 +2,7 @@ import {Navbar} from 'flowbite-react';
 
 export default function NavbarComponent() {
     return (
-        <Navbar fluid rounded>
+        <Navbar fluid className="px-4">
             <Navbar.Brand as={'a'} href="/">
 
                 <span
@@ -12,9 +12,6 @@ export default function NavbarComponent() {
             <Navbar.Collapse>
                 <Navbar.Link href="/" active>
                     Home
-                </Navbar.Link>
-                <Navbar.Link href="solution">
-                    Solution
                 </Navbar.Link>
                 <Navbar.Link as={'a'} href="about">
                     About

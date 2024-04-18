@@ -1,4 +1,4 @@
-import {apiDelete, apiGet, apiPost} from "./apiManager";
+import {apiDelete, apiGet, apiPost, apiPut} from "./apiManager";
 import {apiRoutes} from "../components/constants";
 
 export async function getVehicleProfile(title) {
@@ -15,4 +15,8 @@ export async function deleteVehicleProfile(id) {
 
 export async function createVehicleProfile(data) {
     await apiPost(apiRoutes.createVehicleProfile, data)
+}
+
+export async function updateVehicleProfile(id, data) {
+    await apiPut(apiRoutes.updateVehicleProfile(id), data)
 }
