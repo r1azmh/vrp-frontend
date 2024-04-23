@@ -22,6 +22,15 @@ git clone https://github.com/r1azmh/vrp-frontend.git
 ```shell
 yarn install
 ```
+* Link with Backend:
+Download and set up backend from this [link](https://github.com/r1azmh/vrp-backend) then go to C:\your-location\vrp-frontend\src\components\constants.js and change apiBaseUrl
+```shell
+const apiBaseUrl = YOUR_BASE_URL
+```
+For example, if your backend is running on LocalHost on 8000 port, you should write
+```shell
+const apiBaseUrl = "http://localhost:8000"
+```
 * Run the project:
 ```shell
 yarn start
