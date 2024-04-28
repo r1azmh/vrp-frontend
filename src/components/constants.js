@@ -1,4 +1,6 @@
+
 const apiBaseUrl = process.env.REACT_APP_BASE_URL
+
 
 
 const addQueryParams = (route) => (queryParams = {limit: 10, offset: 0}) => {
