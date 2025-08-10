@@ -64,10 +64,11 @@ const Statistics = () => {
                     className="text-rose-600">{modalData?.work?.name} </span></span>
                 {modalData && <div className="flex justify-end items-center gap-x-1">
                     <Button onClick={() => downloadCsv(modalData)} size="xs" color="light">Export to Excel</Button>
+                    <Button onClick={()=>downloadEmissionCsv(modalData)} size="xs" color="light">Export Emission Estimation </Button>
                     <Button onClick={() => setOpenModal(true)} size="xs" color="blue">Check Freshness
                         Penalty</Button>
                     <Button onClick={()=>emissionReportModal(modalData)} size="xs" color="blue">Emission Estimation</Button>
-                    <Button onClick={()=>downloadEmissionCsv(modalData)} size="xs" color="light">Export Emission Estimation </Button>
+
                 </div>}
             </div>
 
