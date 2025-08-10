@@ -23,7 +23,7 @@ export default function SidebarComponent() {
             <ListGroup className="rounded-t-none rounded-b-none mt-4">
                 {
                     JOBS.map((e, index) => {
-                        return <ListGroup.Item key={index} >
+                        return <ListGroup.Item key={index}
                         onClick={()=>navigate(e.path)}
                          icon={JOBICON[e.name]}>
                             {e.name}
