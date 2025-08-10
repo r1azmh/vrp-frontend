@@ -51,6 +51,7 @@ export const apiRoutes = {
     getWork:addQueryParams(`${apiBaseUrl}/works/`),
     getLastSolution:`${apiBaseUrl}/last_solution/`,
     getSolutionCsv: (Id) =>`${apiBaseUrl}/export_solution_csv/${Id}/`,
+    getEmissionCsv: (Id, extra="") =>`${apiBaseUrl}/emission_report/${Id}/${extra}`,
     getCategories:addQueryParams(`${apiBaseUrl}/categories/`),
     getSearchWork:(title)=>`${apiBaseUrl}/search-works/?name=${title}`,
     createWork: `${apiBaseUrl}/work-create/`,

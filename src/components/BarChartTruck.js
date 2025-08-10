@@ -18,7 +18,6 @@ const BarChartTruck = ({data}) => {
 
     return (
         <ResponsiveContainer
-            width={500}
             height={300} >
             <BarChart
                 data={graphData}

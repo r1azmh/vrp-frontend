@@ -4,7 +4,7 @@ import { ImLocation } from "react-icons/im";
 import { TbTruckLoading } from "react-icons/tb";
 import useDataFetch from "../hooks/useDataFetch";
 import { getSolution } from "../managers/dashboardManager";
-import { getCsv } from "../managers/statisticsManager";
+import {getCsv, getEmissionCsv} from "../managers/statisticsManager";
 import BarChartTruck from "./BarChartTruck";
 import BarChartTruckDetails from "./BarChartTruckDetails";
 import ResultMap from "./ResultMap";
@@ -12,6 +12,7 @@ import { SolutionRoutingTable } from "./SolutionRoutingTable";
 import { apiRoutes } from "./constants";
 import { getTimeDifferenceInHours, humanizeDateTime } from "./functions";
 import DefaultPagination from "./DefaultPagination";
+import {apiGet} from "../managers/apiManager";
 
 
 const Statistics = () => {
@@ -21,11 +22,26 @@ const Statistics = () => {
     const {data: lastSolution, refetch: lastSolutionRefetch, isLoading} = useDataFetch(apiRoutes.getLastSolution)
 
     const [openModal, setOpenModal] = useState(false)
+    const [emissionModal, setEmissionModal] = useState(false)
     const [modalData, setModalData] = useState()
+    const [emissionData, setEmission] = useState()
     const downloadCsv = async (data)=>{
-        console.log(data)
         if (data?.id){
             await getCsv(data.id)
+        }
+    }
+    const downloadEmissionCsv = async (data)=>{
+        if (data?.id){
+            await getEmissionCsv(data.id)
+        }
+    }
+
+    const emissionReportModal = async (data)=>{
+        if (modalData?.id){
+            const _data = await apiGet(apiRoutes.getEmissionCsv(data.id))
+            setEmission(_data.data)
+            setOpenModal(false)
+            setEmissionModal(true)
         }
     }
     useEffect(() => {
@@ -35,6 +51,7 @@ const Statistics = () => {
     }, [lastSolution])
     return (<>
         <ModalComponent openModal={openModal} setOpenModal={setOpenModal} jobs={modalData?.jobs}/>
+        <EmissionModalComponent openModal={emissionModal} setOpenModal={setEmissionModal} data={emissionData}/>
         <div className="text-xl font-bold leading-none m-4 block">Work</div>
         <div className="grid grid-cols-4 gap-4 mt-4">
 
@@ -49,6 +66,8 @@ const Statistics = () => {
                     <Button onClick={() => downloadCsv(modalData)} size="xs" color="light">Export to Excel</Button>
                     <Button onClick={() => setOpenModal(true)} size="xs" color="blue">Check Freshness
                         Penalty</Button>
+                    <Button onClick={()=>emissionReportModal(modalData)} size="xs" color="blue">Emission Estimation</Button>
+                    <Button onClick={()=>downloadEmissionCsv(modalData)} size="xs" color="light">Export Emission Estimation </Button>
                 </div>}
             </div>
 
@@ -158,8 +177,8 @@ function ModalComponent({openModal, setOpenModal, jobs}) {
                     <Table.HeadCell>Freshness Penalty</Table.HeadCell>
                 </Table.Head>
                 <Table.Body className="divide-y">
-                    {jobs && Array.isArray(jobs) && jobs?.map((job) => <Table.Row
-                        className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                    {jobs && Array.isArray(jobs) && jobs?.map((job, index) => <Table.Row key={index}
+                                                                                         className="bg-white dark:border-gray-700 dark:bg-gray-800">
                         <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                             {job?.name}
                         </Table.Cell>
@@ -191,6 +210,47 @@ function ModalComponent({openModal, setOpenModal, jobs}) {
 }
 
 
+function EmissionModalComponent({openModal, setOpenModal, data}) {
+    console.log(data)
+    return (<Modal size={'7xl'} show={openModal} onClose={() => setOpenModal(false)}>
+        <Modal.Header className="text-rose-600">Emission Estimation</Modal.Header>
+        <Modal.Body>
+            <Table striped>
+                <Table.Head>
+                    <Table.HeadCell>Vehicle ID</Table.HeadCell>
+                    <Table.HeadCell>Job</Table.HeadCell>
+                    <Table.HeadCell>Load</Table.HeadCell>
+                    <Table.HeadCell>Distance</Table.HeadCell>
+                    <Table.HeadCell>Tonne-Kilometers (tkm)</Table.HeadCell>
+                    <Table.HeadCell>Emission (kg)</Table.HeadCell>
+                </Table.Head>
+                <Table.Body className="divide-y">
+                    {data && Array.isArray(data?.records) && data?.records?.map((job, index) => {
+                        return <Table.Row key={index}
+                                          className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                            {Object.entries(job).map(([k, v], index) => (
+                                <Table.Cell key={index}>{v}</Table.Cell>))}
+                        </Table.Row>
+                    })}
+
+                    <Table.Row
+                        className="bg-white border-t-black text-black font-bold">
+                        <Table.Cell className="whitespace-nowrap font-bold text-black">
+                            Total
+                        </Table.Cell>
+                        <Table.Cell></Table.Cell>
+                        <Table.Cell></Table.Cell>
+                        <Table.Cell></Table.Cell>
+                        <Table.Cell></Table.Cell>
+                        <Table.Cell>{data?.emission?.toFixed(2)}</Table.Cell>
+                    </Table.Row>
+                </Table.Body>
+            </Table>
+        </Modal.Body>
+    </Modal>);
+}
+
+
 function SolutionStatistics({solution}) {
     const flattenObject = (obj, parentKey = "") => {
         return Object.keys(obj).reduce((acc, key) => {
@@ -206,7 +266,7 @@ function SolutionStatistics({solution}) {
         <p className="text-xl font-bold text-rose-600 py-2">Solution Statistics</p>
         <Table striped>
         <Table.Body className="divide-y">
-            {solution && Object.entries(flattenObject(solution))?.map(([key, value]) => <Table.Row
+            {solution && Object.entries(flattenObject(solution))?.map(([key, value], index) => <Table.Row key={index}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800">
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                     {key?.toUpperCase()}
