@@ -8,14 +8,14 @@ export function SolutionRoutingTable(props) {
         <div className="overflow-x-auto">
             <Table hoverable>
                 <Table.Head>
-                    <Table.HeadCell>VEHICLE ID</Table.HeadCell>
+                    <Table.HeadCell>VEHICLE Name</Table.HeadCell>
                     <Table.HeadCell>TYPE</Table.HeadCell>
-                    <Table.HeadCell>JOB ID</Table.HeadCell>
+                    <Table.HeadCell>JOB Name</Table.HeadCell>
                     <Table.HeadCell>LOCATION</Table.HeadCell>
                     <Table.HeadCell>ARRIVAL(Time)</Table.HeadCell>
                     <Table.HeadCell>DEPARTURE(Time)</Table.HeadCell>
                     <Table.HeadCell>LOAD</Table.HeadCell>
-                    <Table.HeadCell>DISTANCE</Table.HeadCell>
+                    <Table.HeadCell>DISTANCE (KM)</Table.HeadCell>
                 </Table.Head>
                 <Table.Body className="divide-y">
                     {
@@ -43,7 +43,7 @@ function Tour(props) {
                 <Table.Cell>{humanizeDateTime(act?.time?.start ?? stop?.time?.arrival)}</Table.Cell>
                 <Table.Cell>{humanizeDateTime(act?.time?.end ?? stop?.time?.departure)}</Table.Cell>
                 <Table.Cell>{stop?.load?.[0]}</Table.Cell>
-                <Table.Cell>{stop?.distance}</Table.Cell>
+                <Table.Cell>{(stop?.distance / 1000)?.toFixed(2)}</Table.Cell>
             </Table.Row>)
         )
     )

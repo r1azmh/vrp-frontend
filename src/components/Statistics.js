@@ -63,7 +63,7 @@ const Statistics = () => {
                 <span className="text-xl font-bold leading-none p-4 inline-block">Last Generated Solution for <span
                     className="text-rose-600">{modalData?.work?.name} </span></span>
                 {modalData && <div className="flex justify-end items-center gap-x-1">
-                    <Button onClick={() => downloadCsv(modalData)} size="xs" color="light">Export to Excel</Button>
+                    <Button onClick={() => downloadCsv(modalData)} size="xs" color="light">Export Route Planning</Button>
                     <Button onClick={()=>downloadEmissionCsv(modalData)} size="xs" color="light">Export Emission Estimation </Button>
                     <Button onClick={() => setOpenModal(true)} size="xs" color="blue">Check Freshness
                         Penalty</Button>
@@ -169,7 +169,7 @@ function ModalComponent({openModal, setOpenModal, jobs}) {
         <Modal.Body>
             <Table striped>
                 <Table.Head>
-                    <Table.HeadCell>Job ID</Table.HeadCell>
+                    <Table.HeadCell>Job Name</Table.HeadCell>
                     <Table.HeadCell>Category Name</Table.HeadCell>
                     <Table.HeadCell>Penalty per Hour</Table.HeadCell>
                     <Table.HeadCell>Start Time</Table.HeadCell>
@@ -211,45 +211,57 @@ function ModalComponent({openModal, setOpenModal, jobs}) {
 }
 
 
-function EmissionModalComponent({openModal, setOpenModal, data}) {
-    console.log(data)
-    return (<Modal size={'7xl'} show={openModal} onClose={() => setOpenModal(false)}>
-        <Modal.Header className="text-rose-600">Emission Estimation</Modal.Header>
-        <Modal.Body>
-            <Table striped>
-                <Table.Head>
-                    <Table.HeadCell>Vehicle ID</Table.HeadCell>
-                    <Table.HeadCell>Job</Table.HeadCell>
-                    <Table.HeadCell>Load</Table.HeadCell>
-                    <Table.HeadCell>Distance</Table.HeadCell>
-                    <Table.HeadCell>Tonne-Kilometers (tkm)</Table.HeadCell>
-                    <Table.HeadCell>Emission (kg)</Table.HeadCell>
-                </Table.Head>
-                <Table.Body className="divide-y">
-                    {data && Array.isArray(data?.records) && data?.records?.map((job, index) => {
-                        return <Table.Row key={index}
-                                          className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                            {Object.entries(job).map(([k, v], index) => (
-                                <Table.Cell key={index}>{v}</Table.Cell>))}
-                        </Table.Row>
-                    })}
+function EmissionModalComponent({ openModal, setOpenModal, data }) {
+    console.log(data);
 
-                    <Table.Row
-                        className="bg-white border-t-black text-black font-bold">
-                        <Table.Cell className="whitespace-nowrap font-bold text-black">
-                            Total
-                        </Table.Cell>
-                        <Table.Cell></Table.Cell>
-                        <Table.Cell></Table.Cell>
-                        <Table.Cell></Table.Cell>
-                        <Table.Cell></Table.Cell>
-                        <Table.Cell>{data?.emission?.toFixed(2)}</Table.Cell>
-                    </Table.Row>
-                </Table.Body>
-            </Table>
-        </Modal.Body>
-    </Modal>);
+    return (
+        <Modal size={'7xl'} show={openModal} onClose={() => setOpenModal(false)}>
+            <Modal.Header className="text-rose-600">Emission Estimation</Modal.Header>
+            <Modal.Body>
+                <Table striped>
+                    <Table.Head>
+                        <Table.HeadCell>Vehicle Name</Table.HeadCell>
+                        <Table.HeadCell>Job Name</Table.HeadCell>
+                        <Table.HeadCell>Load</Table.HeadCell>
+                        <Table.HeadCell>Distance (km)</Table.HeadCell>
+                        <Table.HeadCell>Tonne-Kilometers (tkm)</Table.HeadCell>
+                        <Table.HeadCell>Emission (kg)</Table.HeadCell>
+                    </Table.Head>
+                    <Table.Body className="divide-y">
+                        {data && Array.isArray(data?.records) && data?.records?.map((job, index) => {
+                            return (
+                                <Table.Row
+                                    key={index}
+                                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                >
+                                    {Object.entries(job).map(([k, v], idx) => (
+                                        <Table.Cell key={idx}>
+                                            {(k === 'Distance' || k === 'tkm' || k === 'emission')
+                                                ? parseFloat(v).toFixed(2)
+                                                : v}
+                                        </Table.Cell>
+                                    ))}
+                                </Table.Row>
+                            );
+                        })}
+
+                        <Table.Row className="bg-white border-t-black text-black font-bold">
+                            <Table.Cell className="whitespace-nowrap font-bold text-black">
+                                Total
+                            </Table.Cell>
+                            <Table.Cell></Table.Cell>
+                            <Table.Cell></Table.Cell>
+                            <Table.Cell></Table.Cell>
+                            <Table.Cell></Table.Cell>
+                            <Table.Cell>{data?.emission?.toFixed(2)}</Table.Cell>
+                        </Table.Row>
+                    </Table.Body>
+                </Table>
+            </Modal.Body>
+        </Modal>
+    );
 }
+
 
 
 function SolutionStatistics({solution}) {
@@ -263,21 +275,52 @@ function SolutionStatistics({solution}) {
             }
         }, {});
     };
-    return <div>
-        <p className="text-xl font-bold text-rose-600 py-2">Solution Statistics</p>
-        <Table striped>
-        <Table.Body className="divide-y">
-            {solution && Object.entries(flattenObject(solution))?.map(([key, value], index) => <Table.Row key={index}
-                className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    {key?.toUpperCase()}
-                </Table.Cell>
-                <Table.Cell>{value && Number.isInteger(value) ? value : value?.toFixed((2))}</Table.Cell>
-            </Table.Row>)}
 
-        </Table.Body>
-    </Table>
-    </div>
+    const getFormattedValue = (key, value) => {
+        const timeKeys = ['duration', 'driving', 'serving', 'waiting', 'commuting', 'parking'];
+        const distanceKey = 'distance';
+
+        if (key.toLowerCase() === distanceKey) {
+            return {
+                key: 'DISTANCE (KM)',
+                value: (value / 1000).toFixed(2)
+            };
+        } else if (timeKeys.includes(key.toLowerCase())) {
+            return {
+                key: `${key.toUpperCase()} (HOUR)`,
+                value: (value / 3600).toFixed(2)
+            };
+        } else {
+            return {
+                key: key.toUpperCase(),
+                value: value && Number.isInteger(value) ? value : value?.toFixed(2)
+            };
+        }
+    };
+
+    return (
+        <div>
+            <p className="text-xl font-bold text-rose-600 py-2">Solution Statistics</p>
+            <Table striped>
+                <Table.Body className="divide-y">
+                    {solution && Object.entries(flattenObject(solution))?.map(([key, value], index) => {
+                        const formatted = getFormattedValue(key, value);
+                        return (
+                            <Table.Row key={index}
+                                       className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                    {formatted.key}
+                                </Table.Cell>
+                                <Table.Cell>
+                                    {formatted.value}
+                                </Table.Cell>
+                            </Table.Row>
+                        );
+                    })}
+                </Table.Body>
+            </Table>
+        </div>
+    );
 }
 
 
