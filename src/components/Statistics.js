@@ -224,7 +224,6 @@ function EmissionModalComponent({ openModal, setOpenModal, data }) {
                         <Table.HeadCell>Job Name</Table.HeadCell>
                         <Table.HeadCell>Load</Table.HeadCell>
                         <Table.HeadCell>Distance (km)</Table.HeadCell>
-                        <Table.HeadCell>Tonne-Kilometers (tkm)</Table.HeadCell>
                         <Table.HeadCell>Emission (kg)</Table.HeadCell>
                     </Table.Head>
                     <Table.Body className="divide-y">
@@ -234,13 +233,14 @@ function EmissionModalComponent({ openModal, setOpenModal, data }) {
                                     key={index}
                                     className="bg-white dark:border-gray-700 dark:bg-gray-800"
                                 >
-                                    {Object.entries(job).map(([k, v], idx) => (
-                                        <Table.Cell key={idx}>
-                                            {(k === 'Distance' || k === 'tkm' || k === 'emission')
-                                                ? parseFloat(v).toFixed(2)
-                                                : v}
-                                        </Table.Cell>
-                                    ))}
+                                    {Object.entries(job)
+                                        .map(([k, v], idx) => (
+                                            <Table.Cell key={idx}>
+                                                {(k === 'Distance' || k === 'Emission (kg)')
+                                                    ? parseFloat(v).toFixed(2)
+                                                    : v}
+                                            </Table.Cell>
+                                        ))}
                                 </Table.Row>
                             );
                         })}
@@ -252,8 +252,7 @@ function EmissionModalComponent({ openModal, setOpenModal, data }) {
                             <Table.Cell></Table.Cell>
                             <Table.Cell></Table.Cell>
                             <Table.Cell></Table.Cell>
-                            <Table.Cell></Table.Cell>
-                            <Table.Cell>{data?.emission?.toFixed(2)}</Table.Cell>
+                            <Table.Cell>{data?.total_emission_kg?.toFixed(2)}</Table.Cell>
                         </Table.Row>
                     </Table.Body>
                 </Table>
