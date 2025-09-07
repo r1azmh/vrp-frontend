@@ -4,9 +4,6 @@ import {useEffect} from "react";
 
 function App() {
     const navigate = useNavigate();
-    useEffect(() => {
-        navigate("/dashboard")
-    }, []);
     return (
         <div className='mx-auto'>
 

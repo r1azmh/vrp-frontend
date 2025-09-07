@@ -16,6 +16,7 @@ import Work from './pages/work/Work';
 import Login from "./pages/login";
 import Signup from "./pages/signup";
 import NavbarComponent from "./components/NavbarComponent.jsx";
+import Tos from "@/pages/tos/index.jsx";
 
 const router = createBrowserRouter([
     {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
     {
         path: "/signup/",
         element: <Signup/>,
+    },
+    {
+        path: "/privacy-policy/",
+        element: <Tos/>,
     },
     {
         path: "/Dashboard/",

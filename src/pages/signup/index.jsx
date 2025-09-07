@@ -7,7 +7,7 @@ export default function Signup() {
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <div className="image-wrapper flex w-full justify-center mb-4">
                     <img
-                        src="/src/assets/logo/anymate_logo.svg"
+                        src="/logo.png"
                         alt="brand logo"
                         className="h-auto w-24"
                     />

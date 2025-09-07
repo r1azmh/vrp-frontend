@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import {useEffect, useState} from "react";
+import {Button, Label, TextInput} from "flowbite-react";
+import {Link} from "react-router-dom";
 
 
 export default function Login() {
@@ -16,7 +17,7 @@ export default function Login() {
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <div className="image-wrapper flex w-full justify-center mb-4">
                     <img
-                        src="/src/assets/logo/anymate_logo.svg"
+                        src="/logo.png"
                         alt="brand logo"
                         className="h-auto w-24"
                     />
@@ -35,7 +36,7 @@ export default function Login() {
                     />
 
                     <div>
-                        <Label htmlFor="username" value="Username" />
+                        <Label htmlFor="username" value="Username"/>
                         <TextInput
                             type="text"
                             id="username"
@@ -48,7 +49,7 @@ export default function Login() {
                     </div>
 
                     <div>
-                        <Label htmlFor="password" value="Password" />
+                        <Label htmlFor="password" value="Password"/>
                         <TextInput
                             type="password"
                             id="password"
@@ -60,20 +61,6 @@ export default function Login() {
                         />
                     </div>
 
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <Checkbox id="remember" name="remember" />
-                            <Label htmlFor="remember" className="text-sm">
-                                Remember me
-                            </Label>
-                        </div>
-                        <a
-                            href="{% url 'password_reset' %}"
-                            className="text-sm text-indigo-600 hover:underline"
-                        >
-                            Forgot password?
-                        </a>
-                    </div>
 
                     <Button type="submit" color="default" className="w-full">
                         Sign In
@@ -82,19 +69,12 @@ export default function Login() {
 
                 <p className="mt-4 text-xs text-muted-foreground text-center">
                     By signing in, you agree to our{" "}
-                    <a
-                        href="#"
+                    <Link
+                        to="/privacy-policy/"
                         className="underline underline-offset-4 hover:text-foreground transition-colors"
                     >
-                        terms of service
-                    </a>{" "}
-                    and{" "}
-                    <a
-                        href="#"
-                        className="underline underline-offset-4 hover:text-foreground transition-colors"
-                    >
-                        privacy policy
-                    </a>
+                        Terms and Privacy Policy
+                    </Link>
                     .
                 </p>
             </div>

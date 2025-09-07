@@ -1,5 +1,5 @@
 // import {Navbar} from 'flowbite-react';
-import { Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from "flowbite-react";
+import {Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle} from "flowbite-react";
 
 export default function NavbarComponent() {
     return (
@@ -14,10 +14,11 @@ export default function NavbarComponent() {
                 <NavbarLink href="/" active>
                     Home
                 </NavbarLink>
-                <NavbarLink as={'a'} href="about">
+                <NavbarLink as={'a'} href="/about/">
                     About
                 </NavbarLink>
-                <NavbarLink href="contact">Contact</NavbarLink>
+                <NavbarLink as={'a'} href="/contact/">Contact</NavbarLink>
+                <NavbarLink as={'a'} href="/dashboard/">Dashboard</NavbarLink>
             </NavbarCollapse>
         </Navbar>
     );
