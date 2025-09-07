@@ -17,6 +17,8 @@ import Job from './pages/job/Job';
 import Error from './pages/not-found/Error';
 import VehicleProfile from './pages/vehicleProfile/VehicleProfile';
 import Work from './pages/work/Work';
+import Login from "./pages/login";
+import Signup from "./pages/signup";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
     {
         path: "/contact",
         element: <Contact/>,
+    },
+    {
+        path: "/login",
+        element: <Login/>,
+    },
+    {
+        path: "/signup",
+        element: <Signup/>,
     },
     {
         path: "/Dashboard",

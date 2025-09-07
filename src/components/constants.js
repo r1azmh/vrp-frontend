@@ -64,7 +64,7 @@ export const apiRoutes = {
     getVehicleProfiles: addQueryParams(`${apiBaseUrl}/vehicle-profiles/`),
     searchVehicleProfiles: (title)=>(`${apiBaseUrl}/vehicle-profiles-search/`),
     createVehicleProfile: `${apiBaseUrl}/vehicle-profile-create/`,
-    updateVehicleProfile: (id)=> `${apiBaseUrl}/vehicle-profile-update/${id}`,
+    updateVehicleProfile: (id)=> `${apiBaseUrl}/vehicle-profile-update/${id}/`,
     deleteVehicleProfile:(id)=> `${apiBaseUrl}/vehicle-profile-delete/${id}/`,
     deleteVehicle:(id)=> `${apiBaseUrl}/vehicle-delete/${id}/`,
     createVehicle:`${apiBaseUrl}/vehicle-create/`,
