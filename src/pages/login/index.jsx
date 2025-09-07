@@ -75,7 +75,7 @@ export default function Login() {
                         </a>
                     </div>
 
-                    <Button type="submit" className="w-full">
+                    <Button type="submit" color="default" className="w-full">
                         Sign In
                     </Button>
                 </form>

@@ -1,5 +1,9 @@
 
-const apiBaseUrl = import.meta.env.VITE_PUBLIC_API_BASE
+let apiBaseUrl = ""
+
+if (import.meta.env.MODE === "development") {
+    apiBaseUrl = import.meta.env.VITE_PUBLIC_API_BASE
+}
 
 
 
