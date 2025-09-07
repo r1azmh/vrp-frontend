@@ -23,23 +23,23 @@ const router = createBrowserRouter([
         element: <App/>,
     },
     {
-        path: "/about",
+        path: "/about/",
         element: <About/>,
     },
     {
-        path: "/contact",
+        path: "/contact/",
         element: <Contact/>,
     },
     {
-        path: "/login",
+        path: "/login/",
         element: <Login/>,
     },
     {
-        path: "/signup",
+        path: "/signup/",
         element: <Signup/>,
     },
     {
-        path: "/Dashboard",
+        path: "/Dashboard/",
         Component: Dashboard,
         children: [
             {
@@ -47,31 +47,31 @@ const router = createBrowserRouter([
                 Component: Statistics,
             },
             {
-                path: "work",
+                path: "work/",
                 Component: Work,
             },
             {
-                path: "job",
+                path: "job/",
                 Component: Job,
             },
             {
-                path: "job-category",
+                path: "job-category/",
                 Component: Category,
             },
             {
-                path: "fleet",
+                path: "fleet/",
                 Component: Fleet,
             },
             {
-                path: "vehicle-profile",
+                path: "vehicle-profile/",
                 Component: VehicleProfile,
             },
             {
-                path: "about",
+                path: "about/",
                 Component: About,
             },
             {
-                path: "contact",
+                path: "contact/",
                 Component: Contact,
             },
         ],
