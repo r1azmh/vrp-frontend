@@ -156,6 +156,7 @@ function ModalComponent({openModal, setOpenModal, modalData, setModalData}) {
     } else {
       await createVehicleProfile(payload);
     }
+    setModalData(null)
     setOpenModal(false);
   };
 

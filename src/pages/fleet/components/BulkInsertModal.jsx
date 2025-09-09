@@ -5,19 +5,19 @@ import SearchWork from "./SearchWork";
 import { createBulkFleet } from "../../../managers/fleetManager";
 
 
-export default function BulkInsertModal({openModal, setOpenModal}) {
+export default function BulkInsertModal({openModal, setOpenModal, refetch}) {
     return (
         <><Modal size='xl' show={openModal} onClose={() => setOpenModal(false)}>
             <ModalHeader>Add Fleets</ModalHeader>
             <ModalBody>
-                <BulkInsertJobForm setOpenModal={setOpenModal}/>
+                <BulkInsertJobForm refetch={refetch} setOpenModal={setOpenModal}/>
             </ModalBody>
         </Modal>
         </>
     );
 }
 
-function BulkInsertJobForm({setOpenModal}) {
+function BulkInsertJobForm({setOpenModal, refetch}) {
     const {
         register,
         control,
@@ -29,6 +29,7 @@ function BulkInsertJobForm({setOpenModal}) {
         fleet.append('work_id', data?.work?.value);
         fleet.append('file', data?.file[0]);
         await createBulkFleet(fleet).then(setOpenModal(false))
+        await refetch()
     }
     return (
         <FormProvider {...{register, control}}>

@@ -77,6 +77,16 @@ export default function Login() {
                     </Link>
                     .
                 </p>
+                <p className="mt-4 text-xs text-muted-foreground text-center">
+                    if you don't have account {" "}
+                    <Link
+                      to="/signup/"
+                      className="underline underline-offset-4 hover:text-foreground transition-colors"
+                    >
+                        Signup
+                    </Link>
+                    .
+                </p>
             </div>
         </div>
     );

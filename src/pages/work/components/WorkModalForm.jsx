@@ -16,6 +16,7 @@ function WorkModalForm({openModal, setOpenModal, modalData, setModalData}) {
         }else {
             await createWork(data)
         }
+        setModalData(null)
         setOpenModal(false)
     }
 

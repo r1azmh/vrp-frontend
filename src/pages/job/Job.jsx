@@ -92,7 +92,7 @@ export default function Job() {
             <DefaultPagination setOffset={setOffset} limit={limit} total={data?.count}/>
             <JobModal openModal={openModal} setOpenModal={setOpenModal} modalData={modalData}
                       setModalData={setModalData}/>
-            <BulkInsertModal openModal={openBulkModal} setOpenModal={setOpenBulkModal}/>
+            <BulkInsertModal refetch={refetch} openModal={openBulkModal} setOpenModal={setOpenBulkModal}/>
             <DeleteModal openModal={openDeleteModal} id={selectedData?.id} handleDelete={handleDeleteJob}
                          setOpenModal={setOpenDeleteModal}/>
         </div>

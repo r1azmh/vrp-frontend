@@ -17,6 +17,7 @@ function CategoryModalForm({openModal, setOpenModal, modalData, setModalData}) {
         } else {
             await createCategory(data)
         }
+        setOpenModal(null)
         setOpenModal(false)
     }
 

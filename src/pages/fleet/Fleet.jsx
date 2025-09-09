@@ -103,7 +103,7 @@ export default function Fleet() {
             </Table>
             <DefaultPagination setOffset={setOffset} limit={limit} total={data?.count} />
             <ModalComponent openModal={openModal} setOpenModal={setOpenModal} modalData={modalData}/>
-            <BulkInsertModal openModal={openBulkModal} setOpenModal={setOpenBulkModal}/>
+            <BulkInsertModal refetch={refetch} openModal={openBulkModal} setOpenModal={setOpenBulkModal}/>
             <DeleteModal openModal={openDeleteModal} id={selectedData?.id} handleDelete={handleDeleteVehicle}
                          setOpenModal={setOpenDeleteModal}/>
         </div>

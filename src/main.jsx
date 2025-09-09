@@ -17,19 +17,12 @@ import Login from "./pages/login";
 import Signup from "./pages/signup";
 import NavbarComponent from "./components/NavbarComponent.jsx";
 import Tos from "@/pages/tos/index.jsx";
+import { toast, Toaster } from 'react-hot-toast';
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <App/>,
-    },
-    {
-        path: "/about/",
-        element: <About/>,
-    },
-    {
-        path: "/contact/",
-        element: <Contact/>,
     },
     {
         path: "/login/",
@@ -71,14 +64,6 @@ const router = createBrowserRouter([
                 path: "vehicle-profile/",
                 Component: VehicleProfile,
             },
-            {
-                path: "about/",
-                Component: About,
-            },
-            {
-                path: "contact/",
-                Component: Contact,
-            },
         ],
     },
     {
@@ -91,6 +76,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
+        <Toaster position="top-center" />
         <div className="min-h-screen font-poppins">
             <NavbarComponent/>
             <div className="bg-white">
@@ -99,3 +85,21 @@ createRoot(document.getElementById('root')).render(
         </div>
     </StrictMode>,
 )
+
+if (window.djangoMessages) {
+    window.djangoMessages.forEach(msg => {
+        switch (msg.level) {
+            case "success":
+                toast.success(msg.text);
+                break;
+            case "error":
+                toast.error(msg.text);
+                break;
+            case "warning":
+                toast(msg.text, { icon: "⚠️" });
+                break;
+            default:
+                toast(msg.text);
+        }
+    });
+}

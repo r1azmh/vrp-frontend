@@ -66,9 +66,24 @@ export default defineConfig({
                             '<link rel="stylesheet" crossorigin href="{% static \'$1\' %}" >'
                         );
 
-                    outputItem.source ="{% load static %}\n" + htmlContent + "\n <script>\n" +
-                        "  window.CSRF_TOKEN = '{{ csrf_token }}';\n" +
-                        "</script>";
+                    // outputItem.source ="{% load static %}\n" + htmlContent + "\n <script>\n" +
+                    //     "  window.CSRF_TOKEN = '{{ csrf_token }}';\n" +
+                    //     "</script>";
+                    outputItem.source =
+                      "{% load static %}\n" +
+                      htmlContent +
+                      "\n<script>\n" +
+                      "  window.CSRF_TOKEN = '{{ csrf_token }}';\n" +
+                      "  window.djangoMessages = [\n" +
+                      "    {% for message in messages %}\n" +
+                      "    {\n" +
+                      "      \"level\": \"{{ message.tags }}\",\n" +
+                      "      \"text\": \"{{ message|escapejs }}\"\n" +
+                      "    }{% if not forloop.last %},{% endif %}\n" +
+                      "    {% endfor %}\n" +
+                      "  ];\n" +
+                      "</script>";
+
 
                     outputItem.fileName = `templates/${fileName}`;
                 }

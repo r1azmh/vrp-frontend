@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from 'react-hot-toast';
 //
 // export async function apiPost(url, data, config={}) {
 //     try {
@@ -53,6 +54,7 @@ export async function apiPost(url, data, config = {}) {
         return await api.post(url, data, config);
     } catch (e) {
         console.error("POST error:", e.response || e);
+        toast.error(e?.response?.data?.error || e.message || e);
         throw e;
     }
 }
@@ -62,6 +64,7 @@ export async function apiPut(url, data, config = {}) {
         return await api.put(url, data, config);
     } catch (e) {
         console.error("PUT error:", e.response || e);
+        toast.error(e?.response?.data?.error || e.message || e);
         throw e;
     }
 }
@@ -71,6 +74,7 @@ export async function apiGet(url, config = {}) {
         return await api.get(url, config);
     } catch (e) {
         console.error("GET error:", e.response || e);
+        toast.error(e?.response?.data?.error || e.message || e);
         throw e;
     }
 }
@@ -80,6 +84,7 @@ export async function apiDelete(url, config = {}) {
         return await api.delete(url, config);
     } catch (e) {
         console.error("DELETE error:", e.response || e);
+        toast.error(e?.response?.data?.error || e.message || e);
         throw e;
     }
 }

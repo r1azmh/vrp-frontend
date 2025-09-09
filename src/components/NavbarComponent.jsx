@@ -3,6 +3,7 @@ import {Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle} from "flo
 
 export default function NavbarComponent() {
     return (
+      <div className="container mx-auto">
         <Navbar fluid className="px-4">
             <NavbarBrand as={'a'} href="/">
 
@@ -14,12 +15,13 @@ export default function NavbarComponent() {
                 <NavbarLink href="/" active>
                     Home
                 </NavbarLink>
-                <NavbarLink as={'a'} href="/about/">
+                <NavbarLink as={'a'} href="/#about">
                     About
                 </NavbarLink>
-                <NavbarLink as={'a'} href="/contact/">Contact</NavbarLink>
+                <NavbarLink as={'a'} href="/#contact">Contact</NavbarLink>
                 <NavbarLink as={'a'} href="/dashboard/">Dashboard</NavbarLink>
             </NavbarCollapse>
         </Navbar>
+      </div>
     );
 }
