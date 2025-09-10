@@ -8,7 +8,7 @@ export default function NavbarComponent() {
             <NavbarBrand as={'a'} href="/">
 
                 <span
-                    className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">VRP Solutions</span>
+                    className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">RouteShaper</span>
             </NavbarBrand>
             <NavbarToggle/>
             <NavbarCollapse>
@@ -19,7 +19,7 @@ export default function NavbarComponent() {
                     About
                 </NavbarLink>
                 <NavbarLink as={'a'} href="/#contact">Contact</NavbarLink>
-                <NavbarLink as={'a'} href="/dashboard/">Dashboard</NavbarLink>
+                <NavbarLink as={'a'} href="/dashboard/">Solver</NavbarLink>
             </NavbarCollapse>
         </Navbar>
       </div>
