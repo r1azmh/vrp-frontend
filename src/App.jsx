@@ -140,7 +140,7 @@ function App() {
               </a>
             </p>
           </div>
-          {/* License */}
+          {/* Contact */}
           <div className="mt-10">
             <h3 className="text-2xl font-semibold">Contact</h3>
             <p className="mt-2 text-gray-600 whitespace-pre-line">
@@ -153,7 +153,7 @@ function App() {
 
       {/* Footer */}
       <footer className="py-6 bg-gray-200 text-center text-gray-700">
-        © 2024 RouteShaper
+        © 2025 RouteShaper
       </footer>
     </div>
   );
