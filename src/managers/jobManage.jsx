@@ -9,8 +9,8 @@ export async function updateJob(jobId, data) {
     await apiPut(apiRoutes.updateJob(jobId), data)
 }
 
-export async function createBulkJob(data) {
-    await apiPost(apiRoutes.postBulkJob, data)
+export async function createBulkJob(data, config={}) {
+    await apiPost(apiRoutes.postBulkJob, data, config)
 }
 
 export async function createMultiJob(data) {

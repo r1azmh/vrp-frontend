@@ -2,7 +2,7 @@ import {Button, FileInput, Label, Modal, ModalBody, ModalHeader} from "flowbite-
 import {FormProvider, useForm} from "react-hook-form";
 import React from "react";
 import SearchWork from "./SearchWork";
-import { createBulkFleet } from "../../../managers/fleetManager";
+import { createBulkFleet } from '@/managers/fleetManager.jsx';
 
 
 export default function BulkInsertModal({openModal, setOpenModal, refetch}) {
@@ -26,9 +26,17 @@ function BulkInsertJobForm({setOpenModal, refetch}) {
     } = useForm()
     const onSubmit = async (data) => {
         const fleet = new FormData();
+        const config = {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "X-CSRFToken": window.CSRF_TOKEN, // 👈 CSRF token for Django
+            },
+            withCredentials: true, // send cookies with requests
+        }
+        console.log(data);
         fleet.append('work_id', data?.work?.value);
         fleet.append('file', data?.file[0]);
-        await createBulkFleet(fleet).then(setOpenModal(false))
+        await createBulkFleet(fleet, config).then(setOpenModal(false))
         await refetch()
     }
     return (

@@ -26,9 +26,16 @@ function BulkInsertJobForm({ setOpenModal, refetch }) {
   } = useForm();
   const onSubmit = async (data) => {
     const job = new FormData();
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "X-CSRFToken": window.CSRF_TOKEN, // 👈 CSRF token for Django
+      },
+      withCredentials: true, // send cookies with requests
+    }
     job.append('work_id', data?.work?.value);
     job.append('file', data?.file[0]);
-    await createBulkJob(job).then(setOpenModal(false));
+    await createBulkJob(job, config).then(setOpenModal(false));
     await refetch();
   };
   return (

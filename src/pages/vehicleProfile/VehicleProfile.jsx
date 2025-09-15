@@ -158,6 +158,7 @@ function ModalComponent({openModal, setOpenModal, modalData, setModalData}) {
     }
     setModalData(null)
     setOpenModal(false);
+    reset()
   };
 
   React.useEffect(() => {

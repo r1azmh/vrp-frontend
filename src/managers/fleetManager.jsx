@@ -36,6 +36,6 @@ export async function getVehicleProfile(title) {
     return res
 }
 
-export async function createBulkFleet(data){
-    await apiPost(apiRoutes.postBulkFleet, data)
+export async function createBulkFleet(data, config={}){
+    await apiPost(apiRoutes.postBulkFleet, data, config)
 }

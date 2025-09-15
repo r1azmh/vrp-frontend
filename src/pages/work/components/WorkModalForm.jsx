@@ -18,6 +18,7 @@ function WorkModalForm({openModal, setOpenModal, modalData, setModalData}) {
         }
         setModalData(null)
         setOpenModal(false)
+        methods.reset()
     }
 
     React.useEffect(() => {

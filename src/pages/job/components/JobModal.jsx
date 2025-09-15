@@ -75,6 +75,7 @@ function JobForm({setOpenModal, data}) {
             formData.jobs = jobs
             await createMultiJob(formData).then(setOpenModal(false))
         }
+        methods.reset()
 
     }
     return (
