@@ -145,7 +145,7 @@ function App() {
             <h3 className="text-2xl font-semibold">Contact</h3>
             <p className="mt-2 text-gray-600 whitespace-pre-line">
               For any issues or queries, contact at: {'\n'}
-              riaz.mahmud at uwasa.fi
+              routeshaper at gmail.com
             </p>
           </div>
         </div>
