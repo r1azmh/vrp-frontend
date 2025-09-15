@@ -1,12 +1,44 @@
-# React + Vite
+## Getting Started
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### 1. Clone the repo
 
-Currently, two official plugins are available:
+```bash
+git clone https://github.com/r1azmh/vrp-frontend.git
+cd vrp-frontend
+git checkout -b vite
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 2. Install dependencies
 
-## Expanding the ESLint configuration
+```bash
+yarn install
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 3. Configure build output
+
+➡️ Change the path above to point to **your own backend folder**.
+
+
+```js
+const outDir = resolve("<vrp-backend-path>")
+```
+
+---
+
+## 🛠 Development
+
+Run the development server with:
+
+```bash
+yarn run dev
+```
+
+This will start Vite’s dev server (default: `http://localhost:5173/`).
+
+---
+
+## 📦 Build for Production
+
+```bash
+yarn build
+```
