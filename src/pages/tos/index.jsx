@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const Tos = () => {
     return (
         <div>
-            <main className="max-w-4xl mx-auto p-6 md:p-12">
+            <main className="container mx-auto p-6 md:p-4">
                 <div className="mb-8">
                     <h1 className="text-3xl font-extrabold leading-tight text-slate-900">RouteShaper — Privacy
                         Statement</h1>
@@ -42,7 +42,7 @@ const Tos = () => {
                         <p>
                             <strong>Contact (Hosted):</strong>
                             <span className="inline-block px-2 py-1 bg-gray-100 rounded text-sm">
-            routeshaper<span aria-hidden="true">@</span>gmail<span aria-hidden="true">.</span>com
+            routeshaper[at]gmail[dot]com
           </span>
                         </p>
                     </section>
@@ -146,8 +146,7 @@ const Tos = () => {
                     </section>
 
                     <footer className="mt-6 border-t pt-4 text-sm text-slate-600">
-                        <p><strong>Contact (Hosted):</strong> routeshaper<span aria-hidden="true">@</span>gmail<span
-                            aria-hidden="true">.</span>com</p>
+                        <p><strong>Contact (Hosted):</strong> routeshaper[at]gmail[dot]com</p>
                         <p className="mt-2">Last updated: <time dateTime="2025-09-07">September 7, 2025</time></p>
                     </footer>
                 </article>
