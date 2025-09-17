@@ -182,7 +182,7 @@ function ModalComponent({openModal, setOpenModal, modalData, setModalData}) {
             {/* Name */}
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="name" value="Profile Name" />
+                <Label htmlFor="name" value="Profile Name">Profile Name</Label>
               </div>
               <TextInput
                 id="name"
@@ -204,7 +204,7 @@ function ModalComponent({openModal, setOpenModal, modalData, setModalData}) {
               {/* Fixed Cost */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="fixed_cost" value="Fixed Cost" />
+                  <Label htmlFor="fixed_cost" value="Fixed Cost">Fixed Cost</Label>
                 </div>
                 <TextInput
                   id="fixed_cost"
@@ -222,7 +222,7 @@ function ModalComponent({openModal, setOpenModal, modalData, setModalData}) {
               {/* Cost Per Meter */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="distance" value="Cost Per Meter" />
+                  <Label htmlFor="distance" value="Cost Per Meter">Cost Per Meter</Label>
                 </div>
                 <TextInput
                   id="distance"
@@ -240,7 +240,7 @@ function ModalComponent({openModal, setOpenModal, modalData, setModalData}) {
               {/* Cost Per Second */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="time" value="Cost Per Second" />
+                  <Label htmlFor="time" value="Cost Per Second">Cost Per Second</Label>
                 </div>
                 <TextInput
                   id="time"
@@ -258,7 +258,7 @@ function ModalComponent({openModal, setOpenModal, modalData, setModalData}) {
               {/* Truck Type */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="truck_type" value="Truck Type" />
+                  <Label htmlFor="truck_type" value="Truck Type">Truck Type</Label>
                 </div>
                 <Select id="truck_type" {...register('truck_type', { required: true })} required>
                   {TRUCK_TYPES.map(opt => (
@@ -271,7 +271,7 @@ function ModalComponent({openModal, setOpenModal, modalData, setModalData}) {
               {/* Temperature */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="temperature" value="Temperature" />
+                  <Label htmlFor="temperature" value="Temperature">Temperature</Label>
                 </div>
                 <Select id="temperature" {...register('temperature', { required: true })} required>
                   {TEMPERATURES.map(opt => (
@@ -284,7 +284,7 @@ function ModalComponent({openModal, setOpenModal, modalData, setModalData}) {
               {/* Max Capacity */}
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="max_capacity" value="Max Capacity (Containers)" />
+                  <Label htmlFor="max_capacity" value="Max Capacity (Containers)">Max Capacity (Containers)</Label>
                 </div>
                 <TextInput
                   id="max_capacity"

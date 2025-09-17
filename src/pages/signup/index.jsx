@@ -32,7 +32,7 @@ export default function Signup() {
             value={csrfToken}
           />
           <div>
-            <Label htmlFor="email" value="Email" />
+            <Label htmlFor="email" value="Email">Email</Label>
             <TextInput
               type="text"
               id="username"
@@ -45,7 +45,7 @@ export default function Signup() {
           </div>
 
           <div>
-            <Label htmlFor="password" value="Password" />
+            <Label htmlFor="password" value="Password">Password</Label>
             <TextInput
               type="password"
               id="password"
@@ -58,7 +58,7 @@ export default function Signup() {
           </div>
 
           <div>
-            <Label htmlFor="confirm-password" value="Confirm Password" />
+            <Label htmlFor="confirm-password" value="Confirm Password" >Confirm Password</Label>
             <TextInput
               type="password"
               id="confirm-password"

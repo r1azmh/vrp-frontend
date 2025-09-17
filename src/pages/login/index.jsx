@@ -36,7 +36,7 @@ export default function Login() {
                     />
 
                     <div>
-                        <Label htmlFor="username" value="Username"/>
+                        <Label htmlFor="username" value="Username">Username</Label>
                         <TextInput
                             type="text"
                             id="username"
@@ -49,7 +49,7 @@ export default function Login() {
                     </div>
 
                     <div>
-                        <Label htmlFor="password" value="Password"/>
+                        <Label htmlFor="password" value="Password">Password</Label>
                         <TextInput
                             type="password"
                             id="password"

@@ -43,13 +43,13 @@ function BulkInsertJobForm({ setOpenModal, refetch }) {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-2">
         <div className="">
           <div className="mb-2 block">
-            <Label htmlFor="work" value="Work" />
+            <Label htmlFor="work" value="Work">Work</Label>
           </div>
           <SearchWork />
         </div>
         <div id="fileUpload" className="">
           <div className="mb-2 block">
-            <Label htmlFor="file" value="Upload file" />
+            <Label htmlFor="file" value="Upload file">Upload file</Label>
           </div>
           <FileInput {...register('file')} id="file"
                      helperText="Upload CSV file" />

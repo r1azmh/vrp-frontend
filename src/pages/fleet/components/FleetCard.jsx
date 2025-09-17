@@ -58,7 +58,7 @@ function FleetCard({handleRemove, index, isEdit}) {
                         </div>
                         <div className="col-span-2">
                             <div className="mb-2 block">
-                                <Label htmlFor="type" value="Vehicle Profile"/>
+                                <Label htmlFor="type" value="Vehicle Profile">Vehicle Profile</Label>
                             </div>
                             <SearchVehicleProfile name={`vehicles.${index}.profile`}/>
                         </div>
