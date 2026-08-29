@@ -2,87 +2,98 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
-RouteShaper is an open-source, web-based decision-support tool for industrial freight route planning with integrated CO₂ emission estimation and quality (freshness) reporting for perishable goods.
+RouteShaper is an open-source, web-based decision-support tool for industrial
+freight route planning with integrated CO₂ emission estimation and quality
+(freshness) reporting for perishable goods.
 
-This repository contains the **web interface**, a React (Create React App)
-project. It requires the [vrp-backend](https://github.com/r1azmh/vrp-backend) service, which holds the data model, the optimization engine and the emission and freshness calculations. Install the backend first.
+This repository contains the **web interface**: a React application built
+with Vite. It requires the
+[vrp-backend](https://github.com/r1azmh/vrp-backend) service, which holds the
+data model, the optimization engine and the emission and freshness
+calculations, **and which also serves this interface in production**. Install
+the backend first.
 
 Developed at the School of Technology and Innovations, University of Vaasa,
-Finland, within the project [Optimising distribution transport in the food ecosystem](https://www.uwasa.fi/en/elintarvike-ekosysteemi).
+Finland, within the project
+[Optimising distribution transport in the food ecosystem](https://www.uwasa.fi/en/elintarvike-ekosysteemi).
 
 ---
 
 ## What the interface provides
 
-- **Accounts** — sign-up, login and password reset. All data is scoped to the account that creates it.
+- **Accounts** — sign-up, login and password reset, handled by Django. All
+  data is scoped to the account that creates it.
 - **Data entry and bulk import** — routing tasks (works), jobs, vehicles,
-  vehicle profiles and perishability categories, individually or in bulk from CSV using the templates in this repository.
-- **Map visualisation** — optimised routes on an OpenStreetMap layer via
-  Leaflet Routing Machine, one colour per vehicle, with depot and stop markers.
+  vehicle profiles and perishability categories, individually or in bulk from
+  CSV using the templates in this repository.
+- **Map visualisation** — optimized routes on an OpenStreetMap layer via
+  Leaflet and Leaflet Routing Machine, one colour per vehicle, with depot and
+  stop markers.
 - **Dashboard** — cost, distance, driving time, CO₂ emissions and freshness
   penalties, per vehicle and for the whole plan.
 - **Exports** — route plan and emission report as CSV.
 
 A short video walkthrough of a full planning session is available here:
-[YouTube Video Link](https://youtu.be/-4l0e0ATQ78).
+[Youtube Video Link](https://youtu.be/-4l0e0ATQ78).
 
 ---
 
 ## Requirements
 
-- Node.js 18 or newer
-- Yarn (`npm install -g yarn`) or npm
-- A running RouteShaper backend
+- Node.js `^20.19.0` or `>=22.12.0` (required by Vite 7)
+- Yarn — this project ships `yarn.lock` only
+- A checkout of [vrp-backend](https://github.com/r1azmh/vrp-backend)
 
 ---
 
-## Configuration
-
-The backend address is read from the environment at build time. Create a
-`.env` file in the project root:
-
-```ini
-REACT_APP_BASE_URL=http://localhost:8000
-```
-
-Use the public URL of the backend for a deployed installation. The variable
-must keep the `REACT_APP_` prefix or Create React App will ignore it, and the value is baked into the bundle — changing it requires a rebuild.
-
----
-
-## Running for development
+## Building for deployment
 
 ```bash
 git clone https://github.com/r1azmh/vrp-frontend.git
 cd vrp-frontend
 yarn install
-yarn start
 ```
 
-The dev server runs at `http://localhost:3000` and talks to the backend at
-`REACT_APP_BASE_URL`. The backend allows all origins in development, so no
-proxy configuration is needed.
-
-## Building for deployment
-
-In production the interface is compiled and served by Django as part of the
-backend, so there is no separate frontend process.
+The build writes into the backend directory. By default it looks for
+`../vrp-backend`, i.e. a sibling checkout. Set `VRP_BACKEND_DIR` if yours is
+somewhere else:
 
 ```bash
-yarn build
+yarn build                                        # sibling ../vrp-backend
+VRP_BACKEND_DIR=/srv/routeshaper/vrp-backend yarn build   # explicit path
 ```
 
-Then copy the output into the backend project:
+Expected output:
+
+```
+../vrp-backend/templates/index.html
+../vrp-backend/static/main-<hash>.js
+../vrp-backend/static/main-<hash>.css
+```
+
+Then start the backend (`python manage.py runserver`) and open
+`http://localhost:8000/signup/`.
+
+Asset filenames are content-hashed and change on every build, so old bundles
+accumulate in `static/`. Clear the directory periodically, and re-run
+`collectstatic` after each build if you deploy with `DEBUG=False`.
+
+> **If you get a blank page**, the bundle is almost certainly being served as
+> HTML. Check the response content type of `/static/main-<hash>.js`: it must be
+> `text/javascript`. If it is `text/html`, Django's catch-all URL pattern is
+> answering the request — see the backend README.
+
+## Running the dev server
 
 ```bash
-mkdir -p ../vrp-backend/templates ../vrp-backend/static
-cp build/index.html  ../vrp-backend/templates/
-cp -r build/static/* ../vrp-backend/static/
+echo "VITE_PUBLIC_API_BASE=http://localhost:8000" > .env
+yarn dev
 ```
 
-Django renders `templates/index.html` for `/`, `/signup/`, `/login/` and
-`/dashboard/`. Until this copy is made, those routes fail with
-`TemplateDoesNotExist`. Re-run both commands after every rebuild.
+Vite serves at `http://localhost:5173` with hot reload. In development mode
+`apiBaseUrl` is read from `VITE_PUBLIC_API_BASE`; in a production build it is
+an empty string, so requests stay same-origin. The backend sets
+`CORS_ALLOW_ALL_ORIGINS = True`, so no proxy configuration is needed.
 
 ---
 
@@ -114,7 +125,22 @@ Django renders `templates/index.html` for `/`, `/signup/`, `/login/` and
 3. Create a **Work** (routing task).
 4. Add **Jobs** and **Vehicles**, individually or by CSV import.
 5. Press **Get Solution** and wait for the solver (up to 300 seconds).
-6. Review the plan on the map and in the dashboard, then export the eports.
+6. Review the plan on the map and in the dashboard, then export the reports.
+
+---
+
+## Project layout
+
+```
+index.html              Vite entry template (contains Django template tags)
+vite.config.js          Build config, incl. the Django-template output plugin
+src/main.jsx            Router and application entry point
+src/App.jsx             Landing page
+src/pages/              Work, job, category, fleet, vehicle profile, auth pages
+src/components/         Dashboard, map, charts, tables, constants.jsx
+src/managers/           API client (apiManager.jsx)
+src/hooks/              Shared React hooks
+```
 
 ---
 
@@ -132,4 +158,4 @@ routing by [OpenRouteService](https://openrouteservice.org/) (HeiGIT).
 
 ## Contact
 
-[riaz dot mahmud at uwasa.fi]
+riaz dot mahmud at uwasa.fi
