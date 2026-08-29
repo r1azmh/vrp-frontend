@@ -32,7 +32,9 @@ import flowbiteReact from "flowbite-react/plugin/vite";
 // Paths
 const root = resolve(__dirname)
 const src = resolve(__dirname, 'src')
-const outDir = resolve("/home/muhammad-samsuddin/workstation/python/vrp-backend/")
+const outDir = process.env.VRP_BACKEND_DIR
+    ? resolve(process.env.VRP_BACKEND_DIR)
+    : resolve(__dirname, '../vrp-backend')
 
 export default defineConfig({
     src,
