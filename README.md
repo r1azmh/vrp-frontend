@@ -1,53 +1,136 @@
-# VRP Solutions - FrontEnd
-This is a project affiliated with University of Vaasa, Finland.
-#### Project Title: [Optimising distribution transport in the food ecosystem](https://www.uwasa.fi/en/elintarvike-ekosysteemi)
-#### Principal Investigator: [Professor Petri Helo](https://www.uwasa.fi/en/person/1041808)
-This is the frontend of the [VRP Solutions Project](https://github.com/r1azmh/vrp-backend). The objective is to develop a user-friendly VRP Solver with a straightforward user interface, implementing an efficient algorithm.
-## How to install
-1. Download and Install NodeJS: Download NodeJS from this [link](https://nodejs.org/en/download) and install in your computer.
-2. Install Package Manager:
-```shell
-npm install -g yarn
+# RouteShaper — Frontend
+
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
+RouteShaper is an open-source, web-based decision-support tool for industrial freight route planning with integrated CO₂ emission estimation and quality (freshness) reporting for perishable goods.
+
+This repository contains the **web interface**, a React (Create React App)
+project. It requires the [vrp-backend](https://github.com/r1azmh/vrp-backend) service, which holds the data model, the optimization engine and the emission and freshness calculations. Install the backend first.
+
+Developed at the School of Technology and Innovations, University of Vaasa,
+Finland, within the project [Optimising distribution transport in the food ecosystem](https://www.uwasa.fi/en/elintarvike-ekosysteemi).
+
+---
+
+## What the interface provides
+
+- **Accounts** — sign-up, login and password reset. All data is scoped to the account that creates it.
+- **Data entry and bulk import** — routing tasks (works), jobs, vehicles,
+  vehicle profiles and perishability categories, individually or in bulk from CSV using the templates in this repository.
+- **Map visualisation** — optimised routes on an OpenStreetMap layer via
+  Leaflet Routing Machine, one colour per vehicle, with depot and stop markers.
+- **Dashboard** — cost, distance, driving time, CO₂ emissions and freshness
+  penalties, per vehicle and for the whole plan.
+- **Exports** — route plan and emission report as CSV.
+
+A short video walkthrough of a full planning session is available here:
+[YouTube Video Link](https://youtu.be/-4l0e0ATQ78).
+
+---
+
+## Requirements
+
+- Node.js 18 or newer
+- Yarn (`npm install -g yarn`) or npm
+- A running RouteShaper backend
+
+---
+
+## Configuration
+
+The backend address is read from the environment at build time. Create a
+`.env` file in the project root:
+
+```ini
+REACT_APP_BASE_URL=http://localhost:8000
 ```
-3. Clone and Run
-* Choose the project directory: Open the Command Prompt and go to the desired location of your computer where you want to download the project.
-```shell
-cd C:\your-location
-```
-* Clone the repository to your computer:
-```shell
+
+Use the public URL of the backend for a deployed installation. The variable
+must keep the `REACT_APP_` prefix or Create React App will ignore it, and the value is baked into the bundle — changing it requires a rebuild.
+
+---
+
+## Running for development
+
+```bash
 git clone https://github.com/r1azmh/vrp-frontend.git
-```
-* Install required packages:
-```shell
+cd vrp-frontend
 yarn install
-```
-* Link with Backend:
-Download and set up backend from this [link](https://github.com/r1azmh/vrp-backend) then go to C:\your-location\vrp-frontend\src\components\constants.js and change apiBaseUrl
-```shell
-const apiBaseUrl = YOUR_BASE_URL
-```
-For example, if your backend is running on LocalHost on 8000 port, you should write
-```shell
-const apiBaseUrl = "http://localhost:8000"
-```
-* Run the project:
-```shell
 yarn start
 ```
-## How to Use
-1. Initiate a New Work
-2. Add Jobs
-3. Add Vehicles
-4. Run the Solver to get the Solution
-## Contact
-In case of any issues or inquiries, please contact us at [riaz.mahmud@uwasa.fi](mailto:riaz.mahmud@uwasa.fi).
+
+The dev server runs at `http://localhost:3000` and talks to the backend at
+`REACT_APP_BASE_URL`. The backend allows all origins in development, so no
+proxy configuration is needed.
+
+## Building for deployment
+
+In production the interface is compiled and served by Django as part of the
+backend, so there is no separate frontend process.
+
+```bash
+yarn build
+```
+
+Then copy the output into the backend project:
+
+```bash
+mkdir -p ../vrp-backend/templates ../vrp-backend/static
+cp build/index.html  ../vrp-backend/templates/
+cp -r build/static/* ../vrp-backend/static/
+```
+
+Django renders `templates/index.html` for `/`, `/signup/`, `/login/` and
+`/dashboard/`. Until this copy is made, those routes fail with
+`TemplateDoesNotExist`. Re-run both commands after every rebuild.
+
+---
+
+## CSV import templates
+
+| File | Columns |
+| --- | --- |
+| `job_bulk_import_template.csv` | `name, category_id, lat, lng, job_type, demand, duration, start_at, end_at, created_by_id, multi_id` |
+| `fleet_bulk_import_template.csv` | `name, lat, lng, capacity, start_at, end_at, created_by_id, profile_id` |
+
+- `job_type` is `pp` for pickup, `dd` for delivery.
+- `duration` is service time in seconds.
+- Times are ISO 8601 UTC, e.g. `2024-04-22T04:25:00.000Z`.
+- On a job, `start_at` is when the container becomes ready for pick-up: it
+  opens the time window and is also the reference time for the freshness
+  penalty.
+- `category_id` and `profile_id` refer to categories and vehicle profiles
+  created in the interface beforehand — create those first and check their IDs.
+
+---
+
+## Typical workflow
+
+1. Register an account and log in.
+2. Create **Categories** with hourly freshness penalties, and **Vehicle
+   Profiles** with cost coefficients, truck type, temperature regime and
+   capacity. The truck type and temperature select the emission factor and
+   materially change the reported CO₂ — set them to match the real fleet.
+3. Create a **Work** (routing task).
+4. Add **Jobs** and **Vehicles**, individually or by CSV import.
+5. Press **Get Solution** and wait for the solver (up to 300 seconds).
+6. Review the plan on the map and in the dashboard, then export the eports.
+
+---
 
 ## License
 
-Apache License
-Version 2.0, January 2004
+Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) and
+[NOTICE](NOTICE).
 
-Copyright © 2024 Petri Helo and Riaz Mahmud.
+Copyright © 2024–2026 Petri Helo and Riaz Mahmud.
 
-Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License. You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0). Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+## Acknowledgements
+
+Supported by the European Regional Development Fund and the Regional Council
+of South Ostrobothnia (grant A80384). Map data © OpenStreetMap contributors;
+routing by [OpenRouteService](https://openrouteservice.org/) (HeiGIT).
+
+## Contact
+
+[riaz dot mahmud at uwasa.fi]
