@@ -120,8 +120,7 @@ Django renders `templates/index.html` for `/`, `/signup/`, `/login/` and
 
 ## License
 
-Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) and
-[NOTICE](NOTICE).
+Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE).
 
 Copyright © 2024–2026 Petri Helo and Riaz Mahmud.
 
