@@ -33,9 +33,6 @@ Finland, within the project
   penalties, per vehicle and for the whole plan.
 - **Exports** — route plan and emission report as CSV.
 
-A short video walkthrough of a full planning session is available here:
-[Youtube Video Link](https://youtu.be/-4l0e0ATQ78).
-
 ---
 
 ## Requirements
@@ -141,6 +138,13 @@ src/components/         Dashboard, map, charts, tables, constants.jsx
 src/managers/           API client (apiManager.jsx)
 src/hooks/              Shared React hooks
 ```
+
+---
+
+## Video Tutorial
+
+A complete step-by-step video tutorial for installation and implementation of RouteShaper is available here:
+[Tutorial Link](https://youtu.be/V_FPSygpemU).
 
 ---
 
