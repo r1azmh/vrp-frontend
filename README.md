@@ -10,8 +10,7 @@ This repository contains the **web interface**: a React application built
 with Vite. It requires the
 [vrp-backend](https://github.com/r1azmh/vrp-backend) service, which holds the
 data model, the optimization engine and the emission and freshness
-calculations, **and which also serves this interface in production**. Install
-the backend first.
+calculations, **and which also serves this interface in production**.
 
 Developed at the School of Technology and Innovations, University of Vaasa,
 Finland, within the project
